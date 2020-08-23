@@ -1,6 +1,6 @@
 import React, { ChangeEventHandler, FC, FormEventHandler, useRef, useState } from 'react';
 import { Button, Divider, Paper, TextField } from '@material-ui/core';
-import { KeyboardDateTimePicker } from '@material-ui/pickers';
+import { DateTimePicker } from '@material-ui/pickers';
 import { addTodo } from '../redux/features/todos/todosSlice';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import dayjs from 'dayjs';
@@ -66,7 +66,7 @@ export const AddTodoInput: FC = () => {
           inputRef={textInputRef}
         />
         <Divider orientation="vertical" flexItem />
-        <KeyboardDateTimePicker
+        <DateTimePicker
           onChange={onDueDateChangeHandler}
           value={dueDate}
           disablePast

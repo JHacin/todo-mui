@@ -24,10 +24,10 @@ export const App: FC = () => {
             <ActiveTodos />
           </Grid>
           <Grid item xs={12}>
-            <ExpiredTodos />
+            <CompletedTodos />
           </Grid>
           <Grid item xs={12}>
-            <CompletedTodos />
+            <ExpiredTodos />
           </Grid>
         </Grid>
       </Container>

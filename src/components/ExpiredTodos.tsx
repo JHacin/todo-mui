@@ -1,21 +1,22 @@
 import React, { FC } from 'react';
-import { List, ListItem, ListItemText, Paper } from '@material-ui/core';
+import { List, ListItem, ListItemSecondaryAction, ListItemText, Paper } from '@material-ui/core';
+import { useTodoSelector } from '../hooks/useTodoSelector';
+import { TodoType } from '../types';
+import { DeleteTodoButton } from './DeleteTodoButton';
 
 export const ExpiredTodos: FC = () => {
-  const mock = [
-    { id: 1, text: 'Todo 1' },
-    { id: 2, text: 'Todo 2' },
-    { id: 3, text: 'Todo 3' },
-    { id: 4, text: 'Todo 4' },
-  ];
+  const { todos } = useTodoSelector(TodoType.Expired);
 
   return (
     <Paper>
       Expired todos
       <List>
-        {mock.map((item) => (
-          <ListItem key={item.id}>
-            <ListItemText primary={`Expired ${item.text}`} />
+        {todos.map((todo) => (
+          <ListItem key={todo.id}>
+            <ListItemText primary={todo.text} />
+            <ListItemSecondaryAction>
+              <DeleteTodoButton todo={todo} />
+            </ListItemSecondaryAction>
           </ListItem>
         ))}
       </List>
