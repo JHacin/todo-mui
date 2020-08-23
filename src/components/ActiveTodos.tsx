@@ -1,21 +1,54 @@
 import React, { FC } from 'react';
-import { List, ListItem, ListItemText, Paper } from '@material-ui/core';
+import {
+  Checkbox,
+  IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemSecondaryAction,
+  ListItemText,
+  Paper,
+} from '@material-ui/core';
+import { markTodoAsCompleted, removeTodo } from '../redux/features/todos/todosSlice';
+import { Todo, TodoType } from '../types';
+import DeleteIcon from '@material-ui/icons/Delete';
+import humanizeDuration from 'humanize-duration';
+import dayjs from 'dayjs';
+import { useTodoSelector } from '../hooks/useTodoSelector';
+import { useAppDispatch } from '../redux/store';
 
 export const ActiveTodos: FC = () => {
-  const mock = [
-    { id: 1, text: 'Todo 1' },
-    { id: 2, text: 'Todo 2' },
-    { id: 3, text: 'Todo 3' },
-    { id: 4, text: 'Todo 4' },
-  ];
+  const dispatch = useAppDispatch();
+  const { todos } = useTodoSelector(TodoType.Active);
+
+  const onMarkAsCompletedHandler = ({ id }: Todo): void => {
+    dispatch(markTodoAsCompleted({ id }));
+  };
+
+  const onRemoveHandler = ({ id }: Todo): void => {
+    dispatch(removeTodo({ id }));
+  };
+
+  const getRemainingTime = ({ dueDate }: Todo): string => {
+    const dateDiff = dayjs(dueDate).diff(dayjs());
+    return humanizeDuration(dateDiff, { largest: 2 });
+  };
 
   return (
     <Paper>
       Active todos
       <List>
-        {mock.map((item) => (
-          <ListItem key={item.id}>
-            <ListItemText primary={`Active ${item.text}`} />
+        {todos.map((todo) => (
+          <ListItem key={todo.id}>
+            <ListItemIcon>
+              <Checkbox edge="start" onClick={() => onMarkAsCompletedHandler(todo)} />
+            </ListItemIcon>
+            <ListItemText primary={todo.text} secondary={getRemainingTime(todo)} />
+            <ListItemSecondaryAction>
+              <IconButton edge="end" onClick={() => onRemoveHandler(todo)}>
+                <DeleteIcon />
+              </IconButton>
+            </ListItemSecondaryAction>
           </ListItem>
         ))}
       </List>

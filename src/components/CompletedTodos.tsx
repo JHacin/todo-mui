@@ -1,21 +1,18 @@
 import React, { FC } from 'react';
 import { List, ListItem, ListItemText, Paper } from '@material-ui/core';
+import { TodoType } from '../types';
+import { useTodoSelector } from '../hooks/useTodoSelector';
 
 export const CompletedTodos: FC = () => {
-  const mock = [
-    { id: 1, text: 'Todo 1' },
-    { id: 2, text: 'Todo 2' },
-    { id: 3, text: 'Todo 3' },
-    { id: 4, text: 'Todo 4' },
-  ];
+  const { todos } = useTodoSelector(TodoType.Completed);
 
   return (
     <Paper>
       Completed todos
       <List>
-        {mock.map((item) => (
-          <ListItem key={item.id}>
-            <ListItemText primary={`Completed ${item.text}`} />
+        {todos.map((todo) => (
+          <ListItem key={todo.id}>
+            <ListItemText primary={todo.text} />
           </ListItem>
         ))}
       </List>
