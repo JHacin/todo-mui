@@ -5,12 +5,14 @@ import 'material-design-icons/iconfont/material-icons.css';
 import { App } from './App';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DayjsUtils from '@date-io/dayjs';
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
 
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <MuiPickersUtilsProvider utils={DayjsUtils}>
       <App />
     </MuiPickersUtilsProvider>
-  </React.StrictMode>,
+  </Provider>,
   document.getElementById('root')
 );
