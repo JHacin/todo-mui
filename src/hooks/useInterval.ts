@@ -13,7 +13,7 @@ export const useInterval = (callback: Function, delay: number): void => {
     savedCallback.current = callback;
   }, [callback]);
 
-  useEffect((): void | (() => void) => {
+  useEffect(() => {
     const intervalId = setInterval(() => tick(), delay);
 
     return () => {

@@ -10,20 +10,13 @@ export interface RootState {
   };
 }
 
-const initialState: RootState = {
-  todos: {
-    ids: [],
-    byId: {},
-  },
-};
-
 const persistedState = localStorage.getItem('state');
 
-const store = configureStore({
+export const store = configureStore({
   reducer: combineReducers({
     todos: todosReducer,
   }),
-  preloadedState: persistedState ? JSON.parse(persistedState) : initialState,
+  preloadedState: persistedState ? JSON.parse(persistedState) : {},
 });
 
 store.subscribe(() => {
@@ -32,5 +25,3 @@ store.subscribe(() => {
 
 export type AppDispatch = typeof store.dispatch;
 export const useAppDispatch = () => useDispatch<AppDispatch>();
-
-export { store };

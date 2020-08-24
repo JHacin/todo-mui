@@ -1,4 +1,4 @@
-import todosReducer, { addTodo, markTodoAsCompleted, removeTodo, todosSliceInitialState } from './todosSlice';
+import todosReducer, { addTodo, initialState, removeTodo, updateTodo } from './todosSlice';
 import { v4 as uuid } from 'uuid';
 import { Todo, TodoType } from '../../../types';
 import dayjs from 'dayjs';
@@ -17,14 +17,14 @@ const createRandomTodo = (type: TodoType = TodoType.Active): Todo => {
 
 describe('todos reducer', () => {
   it('should handle initial state', () => {
-    expect(todosReducer(undefined, {} as AnyAction)).toEqual(todosSliceInitialState);
+    expect(todosReducer(undefined, {} as AnyAction)).toEqual(initialState);
   });
 
   it('should handle addTodo', () => {
     const newTodo = createRandomTodo();
 
     expect(
-      todosReducer(todosSliceInitialState, {
+      todosReducer(initialState, {
         type: addTodo.type,
         payload: newTodo,
       })
@@ -100,7 +100,7 @@ describe('todos reducer', () => {
     });
   });
 
-  it('should handle markTodoAsCompleted', () => {
+  it('should handle updateTodo', () => {
     const updatedTodo = createRandomTodo();
 
     expect(
@@ -110,13 +110,25 @@ describe('todos reducer', () => {
           byId: { [updatedTodo.id]: updatedTodo },
         },
         {
-          type: markTodoAsCompleted.type,
-          payload: { id: updatedTodo.id },
+          type: updateTodo.type,
+          payload: {
+            todo: {
+              ...updatedTodo,
+              type: TodoType.Expired,
+              text: 'I was changed.',
+            },
+          },
         }
       )
     ).toEqual({
       ids: [updatedTodo.id],
-      byId: { [updatedTodo.id]: { ...updatedTodo, type: TodoType.Completed } },
+      byId: {
+        [updatedTodo.id]: {
+          ...updatedTodo,
+          type: TodoType.Expired,
+          text: 'I was changed.',
+        },
+      },
     });
 
     const otherTodo = createRandomTodo();
@@ -131,14 +143,22 @@ describe('todos reducer', () => {
           },
         },
         {
-          type: markTodoAsCompleted.type,
-          payload: { id: updatedTodo.id },
+          type: updateTodo.type,
+          payload: {
+            todo: {
+              ...updatedTodo,
+              type: TodoType.Completed,
+            },
+          },
         }
       )
     ).toEqual({
       ids: [updatedTodo.id, otherTodo.id],
       byId: {
-        [updatedTodo.id]: { ...updatedTodo, type: TodoType.Completed },
+        [updatedTodo.id]: {
+          ...updatedTodo,
+          type: TodoType.Completed,
+        },
         [otherTodo.id]: otherTodo,
       },
     });
