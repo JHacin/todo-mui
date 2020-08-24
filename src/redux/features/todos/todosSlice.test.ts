@@ -1,30 +1,18 @@
-import todosReducer, { addTodo, initialState, removeTodo, updateTodo } from './todosSlice';
-import { v4 as uuid } from 'uuid';
-import { Todo, TodoType } from '../../../types';
-import dayjs from 'dayjs';
+import todosReducer, { addTodo, todosInitialState, removeTodo, updateTodo } from './todosSlice';
+import { TodoType } from '../../../types';
 import { AnyAction } from '@reduxjs/toolkit';
-
-const createRandomTodo = (type: TodoType = TodoType.Active): Todo => {
-  return {
-    id: uuid(),
-    type,
-    text: 'Random todo',
-    dueDate: dayjs()
-      .add(Math.floor(Math.random() * 366), 'day')
-      .format(),
-  };
-};
+import { createRandomTodo } from '../../../test-utils';
 
 describe('todos reducer', () => {
   it('should handle initial state', () => {
-    expect(todosReducer(undefined, {} as AnyAction)).toEqual(initialState);
+    expect(todosReducer(undefined, {} as AnyAction)).toEqual(todosInitialState);
   });
 
   it('should handle addTodo', () => {
     const newTodo = createRandomTodo();
 
     expect(
-      todosReducer(initialState, {
+      todosReducer(todosInitialState, {
         type: addTodo.type,
         payload: newTodo,
       })

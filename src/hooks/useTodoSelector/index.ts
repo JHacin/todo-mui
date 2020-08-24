@@ -1,6 +1,6 @@
-import { TodoType } from '../types';
+import { TodoType } from '../../types';
 import { useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
+import { RootState } from '../../redux/store';
 
 export const useTodoSelector = (type: TodoType) => {
   const todos = useSelector((state: RootState) => {
