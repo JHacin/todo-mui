@@ -14,7 +14,7 @@ describe('todos reducer', () => {
     expect(
       todosReducer(todosInitialState, {
         type: addTodo.type,
-        payload: newTodo,
+        payload: { todo: newTodo },
       })
     ).toEqual({
       ids: [newTodo.id],
@@ -35,7 +35,7 @@ describe('todos reducer', () => {
         },
         {
           type: addTodo.type,
-          payload: newTodo,
+          payload: { todo: newTodo },
         }
       )
     ).toEqual({

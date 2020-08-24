@@ -15,16 +15,18 @@ const todosSlice = createSlice({
   // internally to ensure that createSlice reducers will always return an immutably updated result.
   reducers: {
     addTodo: {
-      reducer(state, action: PayloadAction<Todo>) {
-        state.ids = [action.payload.id, ...state.ids];
-        state.byId[action.payload.id] = action.payload;
+      reducer(state, action: PayloadAction<{ todo: Todo }>) {
+        state.ids = [action.payload.todo.id, ...state.ids];
+        state.byId[action.payload.todo.id] = action.payload.todo;
       },
-      prepare(payload: Omit<Todo, 'id' | 'type'>) {
+      prepare(payload: { todo: Omit<Todo, 'id' | 'type'> }) {
         return {
           payload: {
-            id: uuid(),
-            type: TodoType.Active,
-            ...payload,
+            todo: {
+              id: uuid(),
+              type: TodoType.Active,
+              ...payload.todo,
+            },
           },
         };
       },
