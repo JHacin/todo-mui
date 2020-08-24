@@ -10,7 +10,16 @@ export interface RootState {
   };
 }
 
-export const LOCAL_STORAGE_PERSISTED_STATE_KEY = 'state';
+export const PERSISTED_STATE_KEY = 'state';
+
+export const persistState = (state: ConfigureStoreOptions<RootState>['preloadedState']) => {
+  localStorage.setItem(PERSISTED_STATE_KEY, JSON.stringify(state));
+};
+
+export const getPersistedState = (): ConfigureStoreOptions<RootState>['preloadedState'] | null => {
+  const persistedState = localStorage.getItem(PERSISTED_STATE_KEY);
+  return persistedState ? JSON.parse(persistedState) : null;
+};
 
 export const initStore = ({
   fallbackState = {},
@@ -19,18 +28,18 @@ export const initStore = ({
   fallbackState?: ConfigureStoreOptions<RootState>['preloadedState'];
   options?: ConfigureStoreOptions<RootState>;
 } = {}) => {
-  const persistedState = localStorage.getItem(LOCAL_STORAGE_PERSISTED_STATE_KEY);
+  const persistedState = getPersistedState();
 
   const store = configureStore({
     reducer: combineReducers({
       todos: todosReducer,
     }),
-    preloadedState: persistedState ? JSON.parse(persistedState) : fallbackState,
+    preloadedState: persistedState || fallbackState,
     ...options,
   });
 
   store.subscribe(() => {
-    localStorage.setItem(LOCAL_STORAGE_PERSISTED_STATE_KEY, JSON.stringify(store.getState()));
+    persistState(store.getState());
   });
 
   return store;
