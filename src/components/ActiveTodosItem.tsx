@@ -12,9 +12,18 @@ const getRemainingTime = ({ dueDate }: Todo): number => {
   return dayjs(dueDate).diff(dayjs());
 };
 
+const getReadableDuration = (ms: number) => {
+  return humanizeDuration(ms, {
+    largest: 2,
+    delimiter: ' and ',
+    units: ['y', 'mo', 'd', 'h', 'm'],
+    round: true,
+  });
+};
+
 const getRemainingTimeLabel = (todo: Todo): string => {
   const dateDiff = getRemainingTime(todo);
-  return dateDiff <= 0 ? 'This item has expired.' : humanizeDuration(dateDiff, { largest: 2 });
+  return dateDiff <= 0 ? 'This item has expired.' : getReadableDuration(dateDiff);
 };
 
 export const ActiveTodosItem: FC<{ todo: Todo }> = ({ todo }) => {

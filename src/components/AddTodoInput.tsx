@@ -1,6 +1,6 @@
 import React, { ChangeEventHandler, FC, FormEventHandler, useRef, useState } from 'react';
 import { Box, Button, InputAdornment, TextField } from '@material-ui/core';
-import { DatePicker } from '@material-ui/pickers';
+import { DateTimePicker } from '@material-ui/pickers';
 import { addTodo } from '../redux/features/todos/todosSlice';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { useAppDispatch } from '../redux/store';
@@ -55,11 +55,10 @@ export const AddTodoInput: FC = () => {
           />
         </Box>
         <Box mr={2}>
-          <DatePicker
+          <DateTimePicker
             onChange={onDueDateChangeHandler}
             value={dueDate}
             disablePast
-            autoOk
             placeholder="Select a due date..."
             InputProps={{
               startAdornment: (
