@@ -16,7 +16,7 @@ export const ExpiredTodos: FC = () => {
     <TodoListWrapper title="Overdue">
       <List dense>
         {todos.map((todo) => (
-          <ListItem key={todo.id}>
+          <ListItem key={todo.id} disabled>
             <ListItemText primary={todo.text} />
             <ListItemSecondaryAction>
               <DeleteTodoButton todo={todo} />

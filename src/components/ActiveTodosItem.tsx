@@ -5,45 +5,31 @@ import { DeleteTodoButton } from './DeleteTodoButton';
 import { updateTodo } from '../redux/features/todos/todosSlice';
 import { useAppDispatch } from '../redux/store';
 import dayjs from 'dayjs';
-import humanizeDuration from 'humanize-duration';
 import { useInterval } from '../hooks/useInterval';
+import { RemainingTimeLabel } from './RemainingTimeLabel';
 
 const getRemainingTime = ({ dueDate }: Todo): number => {
   return dayjs(dueDate).diff(dayjs());
 };
 
-const getReadableDuration = (ms: number) => {
-  return humanizeDuration(ms, {
-    largest: 2,
-    delimiter: ' and ',
-    units: ['y', 'mo', 'd', 'h', 'm'],
-    round: true,
-  });
-};
-
-const getRemainingTimeLabel = (todo: Todo): string => {
-  const dateDiff = getRemainingTime(todo);
-  return dateDiff <= 0 ? 'This item has expired.' : getReadableDuration(dateDiff);
-};
-
 export const ActiveTodosItem: FC<{ todo: Todo }> = ({ todo }) => {
   const refreshRemainingTime = (): void => {
     const remainingTime = getRemainingTime(todo);
+    const isExpired = remainingTime <= 0;
 
-    if (remainingTime <= 0) {
+    if (isExpired) {
       dispatch(
         updateTodo({
           todo: { ...todo, type: TodoType.Expired },
         })
       );
-      return;
+    } else {
+      setRemainingTime(remainingTime);
     }
-
-    setRemainingTimeLabel(getRemainingTimeLabel(todo));
   };
 
   const dispatch = useAppDispatch();
-  const [remainingTimeLabel, setRemainingTimeLabel] = useState(getRemainingTimeLabel(todo));
+  const [remainingTime, setRemainingTime] = useState<number>(getRemainingTime(todo));
   useInterval(refreshRemainingTime, 1000 * 60);
 
   const onMarkAsCompletedHandler = (): void => {
@@ -55,11 +41,11 @@ export const ActiveTodosItem: FC<{ todo: Todo }> = ({ todo }) => {
   };
 
   return (
-    <ListItem key={todo.id}>
+    <ListItem key={todo.id} button>
       <ListItemIcon>
         <Checkbox edge="start" onClick={onMarkAsCompletedHandler} />
       </ListItemIcon>
-      <ListItemText primary={todo.text} secondary={remainingTimeLabel} />
+      <ListItemText primary={todo.text} secondary={<RemainingTimeLabel remainingTime={remainingTime} />} />
       <ListItemSecondaryAction>
         <DeleteTodoButton todo={todo} />
       </ListItemSecondaryAction>
