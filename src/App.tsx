@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { AppBar, Container, CssBaseline, Grid, TextField, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Box, Container, CssBaseline, Grid, TextField, Toolbar, Typography } from '@material-ui/core';
 import { AddTodoInput } from './components/AddTodoInput';
 import { ActiveTodos } from './components/ActiveTodos';
 import { ExpiredTodos } from './components/ExpiredTodos';
@@ -16,20 +16,22 @@ export const App: FC = () => {
         </Toolbar>
       </AppBar>
       <Container maxWidth="md">
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <AddTodoInput />
+        <Box my={3}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <AddTodoInput />
+            </Grid>
+            <Grid item xs={12}>
+              <ActiveTodos />
+            </Grid>
+            <Grid item xs={12}>
+              <CompletedTodos />
+            </Grid>
+            <Grid item xs={12}>
+              <ExpiredTodos />
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <ActiveTodos />
-          </Grid>
-          <Grid item xs={12}>
-            <CompletedTodos />
-          </Grid>
-          <Grid item xs={12}>
-            <ExpiredTodos />
-          </Grid>
-        </Grid>
+        </Box>
       </Container>
     </>
   );

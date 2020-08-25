@@ -1,35 +1,24 @@
 import React, { ChangeEventHandler, FC, FormEventHandler, useRef, useState } from 'react';
-import { Button, Divider, Paper, TextField } from '@material-ui/core';
-import { DateTimePicker } from '@material-ui/pickers';
+import { Box, Button, InputAdornment, TextField } from '@material-ui/core';
+import { DatePicker } from '@material-ui/pickers';
 import { addTodo } from '../redux/features/todos/todosSlice';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
-import dayjs from 'dayjs';
 import { useAppDispatch } from '../redux/store';
-
-const isValidDate = (date: MaterialUiPickersDate): boolean => {
-  return !!(date && dayjs(date).isValid());
-};
-
-const REQUIRED_FIELD_MESSAGE = 'This field is required.';
-const INVALID_DATE_MESSAGE = 'Please enter a valid date.';
+import EventIcon from '@material-ui/icons/Event';
 
 export const AddTodoInput: FC = () => {
   const dispatch = useAppDispatch();
   const textInputRef = useRef<HTMLInputElement>(null);
 
   const [text, setText] = useState<string>('');
-  const [textError, setTextError] = useState<boolean>(false);
-  const [dueDate, setDueDate] = useState<MaterialUiPickersDate>(dayjs().add(1, 'week'));
-  const [dueDateError, setDueDateError] = useState<boolean>(false);
+  const [dueDate, setDueDate] = useState<MaterialUiPickersDate>(null);
 
   const onTextChangeHandler: ChangeEventHandler<HTMLInputElement> = (event): void => {
     const value = event.target.value;
-    setTextError(!value);
     setText(value);
   };
 
   const onDueDateChangeHandler = (date: MaterialUiPickersDate): void => {
-    setDueDateError(!isValidDate(date));
     setDueDate(date);
   };
 
@@ -37,8 +26,6 @@ export const AddTodoInput: FC = () => {
     event.preventDefault();
 
     if (!text || !dueDate) {
-      setTextError(!text);
-      setDueDateError(!isValidDate(dueDate));
       return;
     }
 
@@ -56,29 +43,37 @@ export const AddTodoInput: FC = () => {
   };
 
   return (
-    <Paper>
-      <form onSubmit={onSubmitHandler}>
-        <TextField
-          autoFocus
-          placeholder="Add an item..."
-          value={text}
-          onChange={onTextChangeHandler}
-          error={textError}
-          helperText={textError ? REQUIRED_FIELD_MESSAGE : ''}
-          inputRef={textInputRef}
-        />
-        <Divider orientation="vertical" flexItem />
-        <DateTimePicker
-          onChange={onDueDateChangeHandler}
-          value={dueDate}
-          disablePast
-          error={dueDateError}
-          helperText={dueDateError ? INVALID_DATE_MESSAGE : ''}
-        />
-        <Button type="submit" variant="contained" color="primary" disabled={textError || dueDateError}>
+    <form onSubmit={onSubmitHandler}>
+      <Box display="flex">
+        <Box mr={2}>
+          <TextField
+            autoFocus
+            placeholder="Add a task..."
+            value={text}
+            onChange={onTextChangeHandler}
+            inputRef={textInputRef}
+          />
+        </Box>
+        <Box mr={2}>
+          <DatePicker
+            onChange={onDueDateChangeHandler}
+            value={dueDate}
+            disablePast
+            autoOk
+            placeholder="Select a due date..."
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <EventIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Box>
+        <Button type="submit" variant="contained" color="primary" disabled={!text || !dueDate}>
           Add
         </Button>
-      </form>
-    </Paper>
+      </Box>
+    </form>
   );
 };
