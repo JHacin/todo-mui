@@ -1,12 +1,12 @@
 import React, { FC, useState } from 'react';
-import { Todo, TodoType } from '../types';
+import { Todo, TodoType } from '../../types';
 import { Checkbox, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText } from '@material-ui/core';
-import { DeleteTodoButton } from './DeleteTodoButton';
-import { updateTodo } from '../redux/features/todos/todosSlice';
-import { useAppDispatch } from '../redux/store';
+import { DeleteTodoButton } from '../DeleteTodoButton';
+import { updateTodo } from '../../redux/features/todos/todosSlice';
+import { useAppDispatch } from '../../redux/store';
 import dayjs from 'dayjs';
-import { useInterval } from '../hooks/useInterval';
-import { RemainingTimeLabel } from './RemainingTimeLabel';
+import { useInterval } from '../../hooks/useInterval';
+import { RemainingTimeLabel } from '../RemainingTimeLabel';
 
 const getRemainingTime = ({ dueDate }: Todo): number => {
   return dayjs(dueDate).diff(dayjs());
@@ -18,11 +18,7 @@ export const ActiveTodosItem: FC<{ todo: Todo }> = ({ todo }) => {
     const isExpired = remainingTime <= 0;
 
     if (isExpired) {
-      dispatch(
-        updateTodo({
-          todo: { ...todo, type: TodoType.Expired },
-        })
-      );
+      dispatch(updateTodo({ ...todo, type: TodoType.Expired }));
     } else {
       setRemainingTime(remainingTime);
     }
@@ -33,19 +29,19 @@ export const ActiveTodosItem: FC<{ todo: Todo }> = ({ todo }) => {
   useInterval(refreshRemainingTime, 1000 * 60);
 
   const onMarkAsCompletedHandler = (): void => {
-    dispatch(
-      updateTodo({
-        todo: { ...todo, type: TodoType.Completed },
-      })
-    );
+    dispatch(updateTodo({ ...todo, type: TodoType.Completed }));
   };
 
   return (
-    <ListItem key={todo.id} button>
+    <ListItem key={todo.id}>
       <ListItemIcon>
         <Checkbox edge="start" onClick={onMarkAsCompletedHandler} />
       </ListItemIcon>
-      <ListItemText primary={todo.text} secondary={<RemainingTimeLabel remainingTime={remainingTime} />} />
+      <ListItemText
+        primary={todo.text}
+        secondary={<RemainingTimeLabel remainingTime={remainingTime} />}
+        secondaryTypographyProps={{ component: 'div' }}
+      />
       <ListItemSecondaryAction>
         <DeleteTodoButton todo={todo} />
       </ListItemSecondaryAction>

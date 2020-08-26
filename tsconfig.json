@@ -14,7 +14,8 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react",
-    "noImplicitReturns": true
+    "noImplicitReturns": true,
+    "downlevelIteration": true
   },
   "include": ["src"]
 }
