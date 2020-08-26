@@ -16,14 +16,16 @@ describe('useTodoSelector', () => {
 
     spy.mockImplementation((cb) => cb(mockState));
 
-    const { result: activeTodos } = renderHook(() => useTodoSelector(TodoType.Active));
-    expect(activeTodos.current.todos.length).toEqual(0);
+    const { result: activeTodos } = renderHook(() =>
+      useTodoSelector((todo) => todo.type === TodoType.Active)
+    );
+    expect(activeTodos.current.selectedTodos.length).toEqual(0);
   });
 
   it('correctly filters todos by type', () => {
     const mockState: RootState = {
       todos: {
-        ids: ['1', '2', '3', '4'],
+        order: ['1', '2', '3', '4'],
         byId: {
           '1': createRandomTodo(TodoType.Active),
           '2': createRandomTodo(TodoType.Completed),
@@ -35,14 +37,20 @@ describe('useTodoSelector', () => {
 
     spy.mockImplementation((cb) => cb(mockState));
 
-    const { result: activeTodos } = renderHook(() => useTodoSelector(TodoType.Active));
-    expect(activeTodos.current.todos.length).toEqual(3);
+    const { result: activeTodos } = renderHook(() =>
+      useTodoSelector((todo) => todo.type === TodoType.Active)
+    );
+    expect(activeTodos.current.selectedTodos.length).toEqual(3);
 
-    const { result: completedTodos } = renderHook(() => useTodoSelector(TodoType.Completed));
-    expect(completedTodos.current.todos.length).toEqual(1);
+    const { result: completedTodos } = renderHook(() =>
+      useTodoSelector((todo) => todo.type === TodoType.Completed)
+    );
+    expect(completedTodos.current.selectedTodos.length).toEqual(1);
 
-    const { result: expiredTodos } = renderHook(() => useTodoSelector(TodoType.Expired));
-    expect(expiredTodos.current.todos.length).toEqual(0);
+    const { result: expiredTodos } = renderHook(() =>
+      useTodoSelector((todo) => todo.type === TodoType.Expired)
+    );
+    expect(expiredTodos.current.selectedTodos.length).toEqual(0);
 
     spy.mockClear();
   });

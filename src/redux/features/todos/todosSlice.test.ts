@@ -14,10 +14,10 @@ describe('todos reducer', () => {
     expect(
       todosReducer(todosInitialState, {
         type: addTodo.type,
-        payload: { todo: newTodo },
+        payload: newTodo,
       })
     ).toEqual({
-      ids: [newTodo.id],
+      order: [newTodo.id],
       byId: {
         [newTodo.id]: newTodo,
       },
@@ -28,18 +28,18 @@ describe('todos reducer', () => {
     expect(
       todosReducer(
         {
-          ids: [existingTodo.id],
+          order: [existingTodo.id],
           byId: {
             [existingTodo.id]: existingTodo,
           },
         },
         {
           type: addTodo.type,
-          payload: { todo: newTodo },
+          payload: newTodo,
         }
       )
     ).toEqual({
-      ids: [newTodo.id, existingTodo.id],
+      order: [newTodo.id, existingTodo.id],
       byId: {
         [existingTodo.id]: existingTodo,
         [newTodo.id]: newTodo,
@@ -53,16 +53,16 @@ describe('todos reducer', () => {
     expect(
       todosReducer(
         {
-          ids: [removedTodo.id],
+          order: [removedTodo.id],
           byId: { [removedTodo.id]: removedTodo },
         },
         {
           type: removeTodo.type,
-          payload: { id: removedTodo.id },
+          payload: removedTodo,
         }
       )
     ).toEqual({
-      ids: [],
+      order: [],
       byId: {},
     });
 
@@ -71,7 +71,7 @@ describe('todos reducer', () => {
     expect(
       todosReducer(
         {
-          ids: [removedTodo.id, leftoverTodo.id],
+          order: [removedTodo.id, leftoverTodo.id],
           byId: {
             [removedTodo.id]: removedTodo,
             [leftoverTodo.id]: leftoverTodo,
@@ -79,11 +79,11 @@ describe('todos reducer', () => {
         },
         {
           type: removeTodo.type,
-          payload: { id: removedTodo.id },
+          payload: removedTodo,
         }
       )
     ).toEqual({
-      ids: [leftoverTodo.id],
+      order: [leftoverTodo.id],
       byId: { [leftoverTodo.id]: leftoverTodo },
     });
   });
@@ -94,22 +94,20 @@ describe('todos reducer', () => {
     expect(
       todosReducer(
         {
-          ids: [updatedTodo.id],
+          order: [updatedTodo.id],
           byId: { [updatedTodo.id]: updatedTodo },
         },
         {
           type: updateTodo.type,
           payload: {
-            todo: {
-              ...updatedTodo,
-              type: TodoType.Expired,
-              text: 'I was changed.',
-            },
+            ...updatedTodo,
+            type: TodoType.Expired,
+            text: 'I was changed.',
           },
         }
       )
     ).toEqual({
-      ids: [updatedTodo.id],
+      order: [updatedTodo.id],
       byId: {
         [updatedTodo.id]: {
           ...updatedTodo,
@@ -124,7 +122,7 @@ describe('todos reducer', () => {
     expect(
       todosReducer(
         {
-          ids: [updatedTodo.id, otherTodo.id],
+          order: [updatedTodo.id, otherTodo.id],
           byId: {
             [updatedTodo.id]: updatedTodo,
             [otherTodo.id]: otherTodo,
@@ -133,15 +131,13 @@ describe('todos reducer', () => {
         {
           type: updateTodo.type,
           payload: {
-            todo: {
-              ...updatedTodo,
-              type: TodoType.Completed,
-            },
+            ...updatedTodo,
+            type: TodoType.Completed,
           },
         }
       )
     ).toEqual({
-      ids: [updatedTodo.id, otherTodo.id],
+      order: [updatedTodo.id, otherTodo.id],
       byId: {
         [updatedTodo.id]: {
           ...updatedTodo,

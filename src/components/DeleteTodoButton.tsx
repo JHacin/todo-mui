@@ -8,12 +8,12 @@ import { useAppDispatch } from '../redux/store';
 export const DeleteTodoButton: FC<{ todo: Todo }> = ({ todo }) => {
   const dispatch = useAppDispatch();
 
-  const onRemoveHandler = ({ id }: Todo): void => {
-    dispatch(removeTodo({ id }));
+  const onDeleteHandler = (): void => {
+    dispatch(removeTodo(todo));
   };
 
   return (
-    <IconButton edge="end" onClick={() => onRemoveHandler(todo)}>
+    <IconButton edge="end" onClick={onDeleteHandler}>
       <DeleteIcon />
     </IconButton>
   );

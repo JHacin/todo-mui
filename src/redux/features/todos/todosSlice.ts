@@ -4,7 +4,7 @@ import { Todo, TodoType } from '../../../types';
 import { RootState } from '../../store';
 
 export const todosInitialState: RootState['todos'] = {
-  ids: [],
+  order: [],
   byId: {},
 };
 
@@ -15,32 +15,33 @@ const todosSlice = createSlice({
   // internally to ensure that createSlice reducers will always return an immutably updated result.
   reducers: {
     addTodo: {
-      reducer(state, action: PayloadAction<{ todo: Todo }>) {
-        state.ids = [action.payload.todo.id, ...state.ids];
-        state.byId[action.payload.todo.id] = action.payload.todo;
+      reducer(state, action: PayloadAction<Todo>) {
+        state.order = [action.payload.id, ...state.order];
+        state.byId[action.payload.id] = action.payload;
       },
-      prepare(payload: { todo: Omit<Todo, 'id' | 'type'> }) {
+      prepare(payload: Omit<Todo, 'id' | 'type'>) {
         return {
           payload: {
-            todo: {
-              id: uuid(),
-              type: TodoType.Active,
-              ...payload.todo,
-            },
+            id: uuid(),
+            type: TodoType.Active,
+            ...payload,
           },
         };
       },
     },
-    removeTodo(state, action: PayloadAction<{ id: Todo['id'] }>) {
-      state.ids = state.ids.filter((todoId) => todoId !== action.payload.id);
+    removeTodo(state, action: PayloadAction<Todo>) {
+      state.order = state.order.filter((id) => id !== action.payload.id);
       delete state.byId[action.payload.id];
     },
-    updateTodo(state, action: PayloadAction<{ todo: Todo }>) {
-      state.byId[action.payload.todo.id] = action.payload.todo;
+    updateTodo(state, action: PayloadAction<Todo>) {
+      state.byId[action.payload.id] = action.payload;
+    },
+    updateTodosOrder(state, action: PayloadAction<RootState['todos']['order']>) {
+      state.order = action.payload;
     },
   },
 });
 
-export const { addTodo, removeTodo, updateTodo } = todosSlice.actions;
+export const { addTodo, removeTodo, updateTodo, updateTodosOrder } = todosSlice.actions;
 
 export default todosSlice.reducer;

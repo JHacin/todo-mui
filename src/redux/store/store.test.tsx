@@ -9,7 +9,7 @@ export const createRandomInitialState = () => {
 
   const initialState = {
     todos: {
-      ids: [todo.id],
+      order: [todo.id],
       byId: { [todo.id]: todo },
     },
   };
@@ -35,7 +35,7 @@ describe('redux store', () => {
     const { todo, initialState } = createRandomInitialState();
     store.dispatch({
       type: addTodo.type,
-      payload: { todo },
+      payload: todo,
     });
 
     const localStorageState = getPersistedState();

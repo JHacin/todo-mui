@@ -7,16 +7,16 @@ import { TodoListWrapper } from './TodoListWrapper';
 import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
 
 export const ExpiredTodos: FC = () => {
-  const { todos } = useTodoSelector(TodoType.Expired);
+  const { selectedTodos } = useTodoSelector((todo) => todo.type === TodoType.Expired);
 
-  if (!todos.length) {
+  if (!selectedTodos.length) {
     return null;
   }
 
   return (
     <TodoListWrapper title="Overdue">
       <List dense>
-        {todos.map((todo) => (
+        {selectedTodos.map((todo) => (
           <ListItem key={todo.id} disabled>
             <ListItemIcon>
               <SentimentVeryDissatisfiedIcon />

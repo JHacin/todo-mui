@@ -5,8 +5,8 @@ import { Todo } from '../../types';
 
 export interface RootState {
   todos: {
-    ids: Todo['id'][];
-    byId: Record<Todo['id'], Todo>;
+    order: Todo['id'][];
+    byId: Record<Todo['id'], Todo>
   };
 }
 

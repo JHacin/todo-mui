@@ -31,10 +31,8 @@ export const AddTodoInput: FC = () => {
 
     dispatch(
       addTodo({
-        todo: {
-          text,
-          dueDate: dueDate.format(),
-        },
+        text,
+        dueDate: dueDate.format(),
       })
     );
 

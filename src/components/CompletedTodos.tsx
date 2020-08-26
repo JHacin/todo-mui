@@ -21,16 +21,16 @@ const useStyles = makeStyles({
 
 export const CompletedTodos: FC = () => {
   const classes = useStyles();
-  const { todos } = useTodoSelector(TodoType.Completed);
+  const { selectedTodos } = useTodoSelector((todo) => todo.type === TodoType.Completed);
 
-  if (!todos.length) {
+  if (!selectedTodos.length) {
     return null;
   }
 
   return (
     <TodoListWrapper title="Completed">
       <List dense>
-        {todos.map((todo) => (
+        {selectedTodos.map((todo) => (
           <ListItem key={todo.id}>
             <ListItemIcon>
               <Checkbox edge="start" checked disabled />
