@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Box, Container, CssBaseline, Grid} from '@material-ui/core';
+import { Box, Container, CssBaseline, Grid } from '@material-ui/core';
 import { AddTodoInput } from './components/AddTodoInput';
 import { ActiveTodos } from './components/ActiveTodos';
 import { ExpiredTodos } from './components/ExpiredTodos';
