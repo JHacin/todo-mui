@@ -44,12 +44,8 @@ export const ActiveTodos: FC = () => {
               {selectedTodos.map((todo, index) => (
                 <Draggable key={todo.id} draggableId={todo.id} index={index}>
                   {(provided) => (
-                    <div ref={provided.innerRef}>
-                      <ActiveTodosItem
-                        todo={todo}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                      />
+                    <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                      <ActiveTodosItem todo={todo} />
                     </div>
                   )}
                 </Draggable>

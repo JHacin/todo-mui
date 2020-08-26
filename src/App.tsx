@@ -1,20 +1,16 @@
 import React, { FC } from 'react';
-import { AppBar, Box, Container, CssBaseline, Grid, TextField, Toolbar, Typography } from '@material-ui/core';
+import { Box, Container, CssBaseline, Grid} from '@material-ui/core';
 import { AddTodoInput } from './components/AddTodoInput';
 import { ActiveTodos } from './components/ActiveTodos';
 import { ExpiredTodos } from './components/ExpiredTodos';
 import { CompletedTodos } from './components/CompletedTodos';
+import { AppHeader } from './components/AppHeader';
 
 export const App: FC = () => {
   return (
     <>
       <CssBaseline />
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h5">Todo App</Typography>
-          <TextField placeholder="Search..." />
-        </Toolbar>
-      </AppBar>
+      <AppHeader />
       <Container maxWidth="md">
         <Box my={3}>
           <Grid container spacing={3}>
