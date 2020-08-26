@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { List } from '@material-ui/core';
-import { TodoType } from '../../types';
+import { TodoStatus } from '../../types';
 import { useTodoSelector } from '../../hooks/useTodoSelector';
 import { ActiveTodosItem } from './ActiveTodosItem';
 import { TodoListWrapper } from '../TodoListWrapper';
@@ -10,7 +10,7 @@ import { updateTodosOrder } from '../../redux/features/todos/todosSlice';
 
 export const ActiveTodos: FC = () => {
   const dispatch = useAppDispatch();
-  const { selectedTodos, order: originalOrder } = useTodoSelector((todo) => todo.type === TodoType.Active);
+  const { selectedTodos, order: originalOrder } = useTodoSelector((todo) => todo.status === TodoStatus.Active);
 
   const reorderAfterDND = (startIndex: number, endIndex: number) => {
     const reordered = [...selectedTodos];

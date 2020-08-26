@@ -1,5 +1,5 @@
 import React, { FC, ReactElement } from 'react';
-import { Todo, TodoType } from '../types';
+import { Todo, TodoStatus } from '../types';
 import { v4 as uuid } from 'uuid';
 import dayjs from 'dayjs';
 import { render as rtlRender, RenderOptions as RtlRenderOptions } from '@testing-library/react';
@@ -39,7 +39,7 @@ export const render = (
 export const createRandomTodo = (data?: Partial<Todo>): Todo => {
   return {
     id: uuid(),
-    type: TodoType.Active,
+    status: TodoStatus.Active,
     text: 'Random todo',
     dueDate: dayjs()
       .add(Math.floor(Math.random() * 366), 'day')

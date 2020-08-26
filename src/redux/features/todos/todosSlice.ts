@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuid } from 'uuid';
-import { Todo, TodoType } from '../../../types';
+import { Todo, TodoStatus } from '../../../types';
 import { initialRootState, RootState } from '../../index';
 
 const todosSlice = createSlice({
@@ -14,11 +14,11 @@ const todosSlice = createSlice({
         state.order = [action.payload.id, ...state.order];
         state.byId[action.payload.id] = action.payload;
       },
-      prepare(payload: Omit<Todo, 'id' | 'type'>) {
+      prepare(payload: Omit<Todo, 'id' | 'status'>) {
         return {
           payload: {
             id: uuid(),
-            type: TodoType.Active,
+            status: TodoStatus.Active,
             ...payload,
           },
         };

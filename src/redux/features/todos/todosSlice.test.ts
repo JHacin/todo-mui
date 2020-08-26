@@ -1,5 +1,5 @@
 import todosReducer, { addTodo, removeTodo, updateTodo } from './todosSlice';
-import { TodoType } from '../../../types';
+import { TodoStatus } from '../../../types';
 import { AnyAction } from '@reduxjs/toolkit';
 import { createRandomTodo } from '../../../test-utils';
 import { initialRootState, RootState } from '../../index';
@@ -102,7 +102,7 @@ describe('todos reducer', () => {
           type: updateTodo.type,
           payload: {
             ...updatedTodo,
-            type: TodoType.Expired,
+            status: TodoStatus.Expired,
             text: 'I was changed.',
           },
         }
@@ -112,7 +112,7 @@ describe('todos reducer', () => {
       byId: {
         [updatedTodo.id]: {
           ...updatedTodo,
-          type: TodoType.Expired,
+          status: TodoStatus.Expired,
           text: 'I was changed.',
         },
       },
@@ -133,7 +133,7 @@ describe('todos reducer', () => {
           type: updateTodo.type,
           payload: {
             ...updatedTodo,
-            type: TodoType.Completed,
+            status: TodoStatus.Completed,
           },
         }
       )
@@ -142,7 +142,7 @@ describe('todos reducer', () => {
       byId: {
         [updatedTodo.id]: {
           ...updatedTodo,
-          type: TodoType.Completed,
+          status: TodoStatus.Completed,
         },
         [otherTodo.id]: otherTodo,
       },

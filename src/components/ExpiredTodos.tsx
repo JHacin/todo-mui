@@ -1,13 +1,13 @@
 import React, { FC } from 'react';
 import { List, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText } from '@material-ui/core';
 import { useTodoSelector } from '../hooks/useTodoSelector';
-import { TodoType } from '../types';
+import { TodoStatus } from '../types';
 import { DeleteTodoButton } from './DeleteTodoButton';
 import { TodoListWrapper } from './TodoListWrapper';
 import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
 
 export const ExpiredTodos: FC = () => {
-  const { selectedTodos } = useTodoSelector((todo) => todo.type === TodoType.Expired);
+  const { selectedTodos } = useTodoSelector((todo) => todo.status === TodoStatus.Expired);
 
   if (!selectedTodos.length) {
     return null;

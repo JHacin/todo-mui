@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Todo, TodoType } from '../../types';
+import { Todo, TodoStatus } from '../../types';
 import { Checkbox, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText } from '@material-ui/core';
 import { DeleteTodoButton } from '../DeleteTodoButton';
 import { updateTodo } from '../../redux/features/todos/todosSlice';
@@ -18,7 +18,7 @@ export const ActiveTodosItem: FC<{ todo: Todo }> = ({ todo }) => {
     const isExpired = remainingTime <= 0;
 
     if (isExpired) {
-      dispatch(updateTodo({ ...todo, type: TodoType.Expired }));
+      dispatch(updateTodo({ ...todo, status: TodoStatus.Expired }));
     } else {
       setRemainingTime(remainingTime);
     }
@@ -29,7 +29,7 @@ export const ActiveTodosItem: FC<{ todo: Todo }> = ({ todo }) => {
   useInterval(refreshRemainingTime, 1000 * 60);
 
   const onMarkAsCompletedHandler = (): void => {
-    dispatch(updateTodo({ ...todo, type: TodoType.Completed }));
+    dispatch(updateTodo({ ...todo, status: TodoStatus.Completed }));
   };
 
   return (

@@ -7,7 +7,7 @@ import {
   ListItemSecondaryAction,
   ListItemText,
 } from '@material-ui/core';
-import { TodoType } from '../types';
+import { TodoStatus } from '../types';
 import { useTodoSelector } from '../hooks/useTodoSelector';
 import { DeleteTodoButton } from './DeleteTodoButton';
 import { TodoListWrapper } from './TodoListWrapper';
@@ -21,7 +21,7 @@ const useStyles = makeStyles({
 
 export const CompletedTodos: FC = () => {
   const classes = useStyles();
-  const { selectedTodos } = useTodoSelector((todo) => todo.type === TodoType.Completed);
+  const { selectedTodos } = useTodoSelector((todo) => todo.status === TodoStatus.Completed);
 
   if (!selectedTodos.length) {
     return null;
