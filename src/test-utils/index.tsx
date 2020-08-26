@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { FC, ReactElement } from 'react';
 import { Todo, TodoType } from '../types';
 import { v4 as uuid } from 'uuid';
 import dayjs from 'dayjs';
 import { render as rtlRender, RenderOptions as RtlRenderOptions } from '@testing-library/react';
-import { FC, ReactElement } from 'react';
 import { Provider } from 'react-redux';
 import { EnhancedStore } from '@reduxjs/toolkit';
-import { initStore} from '../redux/store';
+import { initStore } from '../redux/store';
 import DayjsUtils from '@date-io/dayjs';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { initialRootState, RootState } from '../redux';
@@ -37,13 +36,14 @@ export const render = (
   return rtlRender(ui, { wrapper: Wrapper, ...renderOptions });
 };
 
-export const createRandomTodo = (type: TodoType = TodoType.Active): Todo => {
+export const createRandomTodo = (data?: Partial<Todo>): Todo => {
   return {
     id: uuid(),
-    type,
+    type: TodoType.Active,
     text: 'Random todo',
     dueDate: dayjs()
       .add(Math.floor(Math.random() * 366), 'day')
       .format(),
+    ...data,
   };
 };
