@@ -6,10 +6,10 @@ import { render as rtlRender, RenderOptions as RtlRenderOptions } from '@testing
 import { FC, ReactElement } from 'react';
 import { Provider } from 'react-redux';
 import { EnhancedStore } from '@reduxjs/toolkit';
-import { todosInitialState } from '../redux/features/todos/todosSlice';
-import { initStore, RootState } from '../redux/store';
+import { initStore} from '../redux/store';
 import DayjsUtils from '@date-io/dayjs';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { initialRootState, RootState } from '../redux';
 
 export * from '@testing-library/react';
 
@@ -21,7 +21,7 @@ interface RenderOptions extends RtlRenderOptions {
 export const render = (
   ui: ReactElement,
   {
-    initialState = { todos: todosInitialState },
+    initialState = initialRootState,
     store = initStore({ fallbackState: initialState }),
     ...renderOptions
   }: RenderOptions = {} as RenderOptions

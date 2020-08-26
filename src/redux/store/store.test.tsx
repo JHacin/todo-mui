@@ -3,11 +3,13 @@ import { App } from '../../App';
 import { createRandomTodo, render } from '../../test-utils';
 import { getPersistedState, initStore, persistState } from './index';
 import { addTodo } from '../features/todos/todosSlice';
+import { initialRootState } from '../index';
 
 export const createRandomInitialState = () => {
   const todo = createRandomTodo();
 
   const initialState = {
+    ...initialRootState,
     todos: {
       order: [todo.id],
       byId: { [todo.id]: todo },

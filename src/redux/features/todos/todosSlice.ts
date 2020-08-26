@@ -1,16 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuid } from 'uuid';
 import { Todo, TodoType } from '../../../types';
-import { RootState } from '../../store';
-
-export const todosInitialState: RootState['todos'] = {
-  order: [],
-  byId: {},
-};
+import { initialRootState, RootState } from '../../index';
 
 const todosSlice = createSlice({
   name: 'todos',
-  initialState: todosInitialState,
+  initialState: initialRootState.todos,
   // It looks like we are mutating the state directly, however Redux toolkit uses Immer
   // internally to ensure that createSlice reducers will always return an immutably updated result.
   reducers: {

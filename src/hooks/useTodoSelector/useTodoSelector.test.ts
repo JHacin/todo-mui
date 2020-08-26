@@ -1,20 +1,15 @@
 import * as reactRedux from 'react-redux';
-import { RootState } from '../../redux/store';
 import { createRandomTodo } from '../../test-utils';
 import { TodoType } from '../../types';
 import { renderHook } from '@testing-library/react-hooks';
 import { useTodoSelector } from './index';
-import { todosInitialState } from '../../redux/features/todos/todosSlice';
+import { initialRootState, RootState } from '../../redux';
 
 const spy = jest.spyOn(reactRedux, 'useSelector');
 
 describe('useTodoSelector', () => {
   it('handles initial state', () => {
-    const mockState: RootState = {
-      todos: todosInitialState,
-    };
-
-    spy.mockImplementation((cb) => cb(mockState));
+    spy.mockImplementation((cb) => cb(initialRootState));
 
     const { result: activeTodos } = renderHook(() =>
       useTodoSelector((todo) => todo.type === TodoType.Active)
@@ -24,6 +19,7 @@ describe('useTodoSelector', () => {
 
   it('correctly filters todos by type', () => {
     const mockState: RootState = {
+      ...initialRootState,
       todos: {
         order: ['1', '2', '3', '4'],
         byId: {

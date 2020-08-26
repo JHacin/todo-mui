@@ -1,8 +1,13 @@
-import React, { ChangeEventHandler, FC, useState } from 'react';
+import React, { ChangeEventHandler, FC, useEffect, useState } from 'react';
 import SearchIcon from '@material-ui/icons/Search';
 import ClearIcon from '@material-ui/icons/Clear';
 import { createStyles, fade, InputAdornment, TextField, Theme, IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { useAppDispatch } from '../../redux/store';
+import { updateSearch } from '../../redux/features/search/searchSlice';
+import { useDebounce } from '../../hooks/useDebounce';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,7 +34,16 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const SearchInput: FC = () => {
   const classes = useStyles();
-  const [search, setSearch] = useState<string>('');
+  const dispatch = useAppDispatch();
+  const rootStateSearch = useSelector((state: RootState) => state.search);
+  const [search, setSearch] = useState<string>(rootStateSearch);
+  const debouncedSearch = useDebounce<string>(search, 250);
+
+  useEffect(() => {
+    if (debouncedSearch !== rootStateSearch) {
+      dispatch(updateSearch(debouncedSearch));
+    }
+  }, [dispatch, rootStateSearch, debouncedSearch]);
 
   const onChangeHandler: ChangeEventHandler<HTMLInputElement> = (event): void => {
     setSearch(event.target.value);

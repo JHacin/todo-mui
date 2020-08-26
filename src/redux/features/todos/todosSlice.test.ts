@@ -1,22 +1,23 @@
-import todosReducer, { addTodo, todosInitialState, removeTodo, updateTodo } from './todosSlice';
+import todosReducer, { addTodo, removeTodo, updateTodo } from './todosSlice';
 import { TodoType } from '../../../types';
 import { AnyAction } from '@reduxjs/toolkit';
 import { createRandomTodo } from '../../../test-utils';
+import { initialRootState, RootState } from '../../index';
 
 describe('todos reducer', () => {
   it('should handle initial state', () => {
-    expect(todosReducer(undefined, {} as AnyAction)).toEqual(todosInitialState);
+    expect(todosReducer(undefined, {} as AnyAction)).toEqual(initialRootState.todos);
   });
 
   it('should handle addTodo', () => {
     const newTodo = createRandomTodo();
 
     expect(
-      todosReducer(todosInitialState, {
+      todosReducer(initialRootState.todos, {
         type: addTodo.type,
         payload: newTodo,
       })
-    ).toEqual({
+    ).toEqual<RootState['todos']>({
       order: [newTodo.id],
       byId: {
         [newTodo.id]: newTodo,
@@ -38,7 +39,7 @@ describe('todos reducer', () => {
           payload: newTodo,
         }
       )
-    ).toEqual({
+    ).toEqual<RootState['todos']>({
       order: [newTodo.id, existingTodo.id],
       byId: {
         [existingTodo.id]: existingTodo,
@@ -61,7 +62,7 @@ describe('todos reducer', () => {
           payload: removedTodo,
         }
       )
-    ).toEqual({
+    ).toEqual<RootState['todos']>({
       order: [],
       byId: {},
     });
@@ -82,7 +83,7 @@ describe('todos reducer', () => {
           payload: removedTodo,
         }
       )
-    ).toEqual({
+    ).toEqual<RootState['todos']>({
       order: [leftoverTodo.id],
       byId: { [leftoverTodo.id]: leftoverTodo },
     });
@@ -106,7 +107,7 @@ describe('todos reducer', () => {
           },
         }
       )
-    ).toEqual({
+    ).toEqual<RootState['todos']>({
       order: [updatedTodo.id],
       byId: {
         [updatedTodo.id]: {
@@ -136,7 +137,7 @@ describe('todos reducer', () => {
           },
         }
       )
-    ).toEqual({
+    ).toEqual<RootState['todos']>({
       order: [updatedTodo.id, otherTodo.id],
       byId: {
         [updatedTodo.id]: {

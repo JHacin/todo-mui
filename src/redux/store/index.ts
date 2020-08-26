@@ -1,14 +1,8 @@
-import { configureStore, combineReducers, ConfigureStoreOptions } from '@reduxjs/toolkit';
+import { combineReducers, configureStore, ConfigureStoreOptions } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 import todosReducer from '../features/todos/todosSlice';
-import { Todo } from '../../types';
-
-export interface RootState {
-  todos: {
-    order: Todo['id'][];
-    byId: Record<Todo['id'], Todo>
-  };
-}
+import searchReducer from '../features/search/searchSlice';
+import { RootState } from '../index';
 
 export const PERSISTED_STATE_KEY = 'state';
 
@@ -33,6 +27,7 @@ export const initStore = ({
   const store = configureStore({
     reducer: combineReducers({
       todos: todosReducer,
+      search: searchReducer,
     }),
     preloadedState: persistedState || fallbackState,
     ...options,
