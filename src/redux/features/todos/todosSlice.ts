@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuid } from 'uuid';
 import { Todo, TodoStatus } from '../../../types';
 import { initialRootState, RootState } from '../../index';
+import { isDueDateExpired } from '../../../util';
 
 const todosSlice = createSlice({
   name: 'todos',
@@ -18,7 +19,7 @@ const todosSlice = createSlice({
         return {
           payload: {
             id: uuid(),
-            status: TodoStatus.Active,
+            status: isDueDateExpired(payload.dueDate) ? TodoStatus.Expired : TodoStatus.Active,
             ...payload,
           },
         };

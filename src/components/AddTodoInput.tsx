@@ -5,6 +5,8 @@ import { addTodo } from '../redux/features/todos/todosSlice';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { useAppDispatch } from '../redux/store';
 import EventIcon from '@material-ui/icons/Event';
+import dayjs from 'dayjs';
+import { isDueDateExpired } from '../util';
 
 export const AddTodoInput: FC = () => {
   const dispatch = useAppDispatch();
@@ -12,6 +14,11 @@ export const AddTodoInput: FC = () => {
 
   const [text, setText] = useState<string>('');
   const [dueDate, setDueDate] = useState<MaterialUiPickersDate>(null);
+  const [dueDateError, setDueDateError] = useState<boolean>(false);
+
+  const isDueDateInvalid = (date: MaterialUiPickersDate): boolean => {
+    return !date || isDueDateExpired(date);
+  };
 
   const onTextChangeHandler: ChangeEventHandler<HTMLInputElement> = (event): void => {
     const value = event.target.value;
@@ -19,6 +26,7 @@ export const AddTodoInput: FC = () => {
   };
 
   const onDueDateChangeHandler = (date: MaterialUiPickersDate): void => {
+    setDueDateError(isDueDateInvalid(date));
     setDueDate(date);
   };
 
@@ -26,6 +34,11 @@ export const AddTodoInput: FC = () => {
     event.preventDefault();
 
     if (!text || !dueDate) {
+      return;
+    }
+
+    if (isDueDateInvalid(dueDate)) {
+      setDueDateError(true);
       return;
     }
 
@@ -42,7 +55,7 @@ export const AddTodoInput: FC = () => {
 
   return (
     <form onSubmit={onSubmitHandler}>
-      <Box display="flex">
+      <Box display="flex" alignItems="flex-start">
         <Box mr={2}>
           <TextField
             autoFocus
@@ -57,7 +70,11 @@ export const AddTodoInput: FC = () => {
             onChange={onDueDateChangeHandler}
             value={dueDate}
             disablePast
+            ampm={false}
+            initialFocusedDate={dayjs().add(1, 'hour')}
             placeholder="Select a due date..."
+            helperText={dueDateError ? 'Please select a future date and time.' : ''}
+            error={dueDateError}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -67,7 +84,12 @@ export const AddTodoInput: FC = () => {
             }}
           />
         </Box>
-        <Button type="submit" variant="contained" color="primary" disabled={!text || !dueDate}>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={!text || !dueDate || dueDateError}
+        >
           Add
         </Button>
       </Box>

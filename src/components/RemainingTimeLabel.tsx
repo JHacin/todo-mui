@@ -18,7 +18,7 @@ export const RemainingTimeLabel: FC<{ remainingTime: number }> = ({ remainingTim
       <Box mr={1}>
         <ScheduleIcon fontSize="small" />
       </Box>
-      {getReadableDuration(remainingTime)}
+      {remainingTime > 0 ? getReadableDuration(remainingTime) : 'This task has expired.'}
     </Box>
   );
 };
