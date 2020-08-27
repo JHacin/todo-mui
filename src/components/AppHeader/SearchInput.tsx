@@ -85,6 +85,7 @@ export const SearchInput: FC = () => {
           </InputAdornment>
         ),
       }}
+      fullWidth
     />
   );
 };

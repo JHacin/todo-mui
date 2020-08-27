@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { AppBar, Box, Grid, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Box, Grid, Hidden, Toolbar, Typography } from '@material-ui/core';
 import { SearchInput } from './SearchInput';
 
 export const AppHeader: FC = () => {
@@ -7,12 +7,14 @@ export const AppHeader: FC = () => {
     <AppBar position="static">
       <Toolbar>
         <Grid container>
-          <Grid item>
-            <Box mr={3}>
-              <Typography variant="h5">Todo App</Typography>
-            </Box>
-          </Grid>
-          <Grid item>
+          <Hidden xsDown>
+            <Grid item>
+              <Box mr={3}>
+                <Typography variant="h5">Todo App</Typography>
+              </Box>
+            </Grid>
+          </Hidden>
+          <Grid item xs={12} sm="auto">
             <SearchInput />
           </Grid>
         </Grid>

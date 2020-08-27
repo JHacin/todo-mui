@@ -1,5 +1,5 @@
 import React, { FC, useRef } from 'react';
-import { Box, Button, InputAdornment, TextField } from '@material-ui/core';
+import { Button, Grid, InputAdornment, TextField } from '@material-ui/core';
 import { DateTimePicker } from '@material-ui/pickers';
 import { addTodo } from '../redux/features/todos/todosSlice';
 import { useAppDispatch } from '../redux/store';
@@ -7,7 +7,7 @@ import EventIcon from '@material-ui/icons/Event';
 import dayjs from 'dayjs';
 import { TodoFormValues, useTodoFormContext } from '../hooks/useTodoFormContext';
 
-export const AddTodoInput: FC = () => {
+export const AddTodoForm: FC = () => {
   const dispatch = useAppDispatch();
   const textInputRef = useRef<HTMLInputElement>(null);
 
@@ -33,17 +33,18 @@ export const AddTodoInput: FC = () => {
 
   return (
     <form onSubmit={onSubmit}>
-      <Box display="flex" alignItems="flex-start">
-        <Box mr={2}>
+      <Grid container spacing={2} alignItems="flex-start">
+        <Grid item xs={12} sm="auto">
           <TextField
             autoFocus
             placeholder="Add a task..."
             value={values.text}
             onChange={(event) => updateField('text', event.target.value)}
             inputRef={textInputRef}
+            fullWidth
           />
-        </Box>
-        <Box mr={2}>
+        </Grid>
+        <Grid item xs={12} sm="auto">
           <DateTimePicker
             onChange={(date) => updateField('dueDate', date)}
             value={values.dueDate}
@@ -53,6 +54,7 @@ export const AddTodoInput: FC = () => {
             placeholder="Select a due date..."
             helperText={touched.dueDate && errors.dueDate ? 'Please select a future date and time.' : ''}
             error={touched.dueDate && errors.dueDate}
+            fullWidth
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -61,11 +63,13 @@ export const AddTodoInput: FC = () => {
               ),
             }}
           />
-        </Box>
-        <Button type="submit" variant="contained" color="primary" disabled={!isValid}>
-          Add
-        </Button>
-      </Box>
+        </Grid>
+        <Grid item xs={12} sm="auto">
+          <Button type="submit" variant="contained" color="primary" disabled={!isValid} fullWidth>
+            Add
+          </Button>
+        </Grid>
+      </Grid>
     </form>
   );
 };

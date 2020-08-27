@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Todo } from '../../types';
-import { Box, Button, InputAdornment, TextField } from '@material-ui/core';
+import { Button, Grid, InputAdornment, TextField } from '@material-ui/core';
 import { DateTimePicker } from '@material-ui/pickers';
 import EventIcon from '@material-ui/icons/Event';
 import { TodoFormValues, useTodoFormContext } from '../../hooks/useTodoFormContext';
@@ -11,7 +11,7 @@ interface ActiveTodosItemEditFormProps {
   onEditSubmit: (todo: Todo) => void;
 }
 
-export const ActiveTodosItemEditForm: FC<ActiveTodosItemEditFormProps> = ({ todo, onEditSubmit }) => {
+export const EditTodoForm: FC<ActiveTodosItemEditFormProps> = ({ todo, onEditSubmit }) => {
   const onSubmitHandler = ({ text, dueDate }: TodoFormValues): void => {
     onEditSubmit({
       ...todo,
@@ -30,8 +30,8 @@ export const ActiveTodosItemEditForm: FC<ActiveTodosItemEditFormProps> = ({ todo
 
   return (
     <form onSubmit={onSubmit}>
-      <Box display="flex" alignItems="flex-start">
-        <Box mr={2}>
+      <Grid container alignItems="flex-start" spacing={2}>
+        <Grid item>
           <TextField
             autoFocus
             placeholder="Add a description..."
@@ -40,8 +40,8 @@ export const ActiveTodosItemEditForm: FC<ActiveTodosItemEditFormProps> = ({ todo
             value={values.text}
             onChange={(event) => updateField('text', event.target.value)}
           />
-        </Box>
-        <Box mr={2}>
+        </Grid>
+        <Grid item>
           <DateTimePicker
             onChange={(date) => updateField('dueDate', date)}
             value={values.dueDate}
@@ -58,11 +58,13 @@ export const ActiveTodosItemEditForm: FC<ActiveTodosItemEditFormProps> = ({ todo
               ),
             }}
           />
-        </Box>
-        <Button type="submit" variant="contained" color="primary" disabled={!isValid}>
-          Update
-        </Button>
-      </Box>
+        </Grid>
+        <Grid item>
+          <Button type="submit" variant="contained" color="primary" disabled={!isValid}>
+            Update
+          </Button>
+        </Grid>
+      </Grid>
     </form>
   );
 };

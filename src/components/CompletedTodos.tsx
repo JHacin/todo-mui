@@ -43,7 +43,13 @@ export const CompletedTodos: FC = () => {
         {selectedTodos.map((todo) => (
           <ListItem key={todo.id}>
             <ListItemIcon>
-              <Checkbox edge="start" checked color="primary" onClick={() => onUncompleteClickHandler(todo)} />
+              <Checkbox
+                edge="start"
+                checked
+                color="primary"
+                onClick={() => onUncompleteClickHandler(todo)}
+                size="small"
+              />
             </ListItemIcon>
             <ListItemText
               primary={todo.text}

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Box, Container, CssBaseline, Grid } from '@material-ui/core';
-import { AddTodoInput } from './components/AddTodoInput';
+import { AddTodoForm } from './components/AddTodoForm';
 import { ActiveTodos } from './components/ActiveTodos';
 import { ExpiredTodos } from './components/ExpiredTodos';
 import { CompletedTodos } from './components/CompletedTodos';
@@ -15,7 +15,7 @@ export const App: FC = () => {
         <Box my={3}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <AddTodoInput />
+              <AddTodoForm />
             </Grid>
             <Grid item xs={12}>
               <ActiveTodos />
