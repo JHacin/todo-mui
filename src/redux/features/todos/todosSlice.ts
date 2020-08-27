@@ -33,7 +33,7 @@ const todosSlice = createSlice({
       state.byId[action.payload.id] = action.payload;
     },
     updateTodosOrder(state, action: PayloadAction<Todo['id'][]>) {
-      state.order = [...new Set([...action.payload, ...state.order])]; // We remove any duplicates.
+      state.order = [...new Set(action.payload)]; // We remove any duplicates.
     },
     updateAllTodos(state, action: PayloadAction<Todo[]>) {
       action.payload.forEach((todo) => (state.byId[todo.id] = todo));

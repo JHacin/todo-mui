@@ -7,11 +7,13 @@ import {
   ListItemSecondaryAction,
   ListItemText,
 } from '@material-ui/core';
-import { TodoStatus } from '../types';
+import { Todo, TodoStatus } from '../types';
 import { useTodoSelector } from '../hooks/useTodoSelector';
 import { DeleteTodoButton } from './DeleteTodoButton';
 import { TodoListWrapper } from './TodoListWrapper';
 import { makeStyles } from '@material-ui/core/styles';
+import { useAppDispatch } from '../redux/store';
+import { updateTodo, updateTodosOrder } from '../redux/features/todos/todosSlice';
 
 const useStyles = makeStyles({
   primaryText: {
@@ -21,7 +23,15 @@ const useStyles = makeStyles({
 
 export const CompletedTodos: FC = () => {
   const classes = useStyles();
-  const { selectedTodos } = useTodoSelector((todo) => todo.status === TodoStatus.Completed);
+  const dispatch = useAppDispatch();
+  const { selectedTodos, order: originalOrder } = useTodoSelector(
+    (todo) => todo.status === TodoStatus.Completed
+  );
+
+  const onUncompleteClickHandler = (todo: Todo): void => {
+    dispatch(updateTodo({ ...todo, status: TodoStatus.Active }));
+    dispatch(updateTodosOrder([todo.id, ...originalOrder]));
+  };
 
   if (!selectedTodos.length) {
     return null;
@@ -33,7 +43,7 @@ export const CompletedTodos: FC = () => {
         {selectedTodos.map((todo) => (
           <ListItem key={todo.id}>
             <ListItemIcon>
-              <Checkbox edge="start" checked disabled />
+              <Checkbox edge="start" checked color="primary" onClick={() => onUncompleteClickHandler(todo)} />
             </ListItemIcon>
             <ListItemText
               primary={todo.text}

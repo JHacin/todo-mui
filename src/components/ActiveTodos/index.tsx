@@ -10,7 +10,9 @@ import { updateTodosOrder } from '../../redux/features/todos/todosSlice';
 
 export const ActiveTodos: FC = () => {
   const dispatch = useAppDispatch();
-  const { selectedTodos } = useTodoSelector((todo) => todo.status === TodoStatus.Active);
+  const { selectedTodos, order: originalOrder } = useTodoSelector(
+    (todo) => todo.status === TodoStatus.Active
+  );
 
   const reorderAfterDND = (startIndex: number, endIndex: number) => {
     const reordered = [...selectedTodos];
@@ -27,7 +29,7 @@ export const ActiveTodos: FC = () => {
 
     const reordered = reorderAfterDND(source.index, destination.index).map((todo) => todo.id);
 
-    dispatch(updateTodosOrder(reordered));
+    dispatch(updateTodosOrder([...reordered, ...originalOrder]));
   };
 
   if (!selectedTodos.length) {
