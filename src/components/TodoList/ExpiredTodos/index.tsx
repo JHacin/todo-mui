@@ -3,8 +3,8 @@ import { List, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText } f
 import { useTodoSelector } from '../../../hooks/useTodoSelector';
 import { TodoStatus } from '../../../types';
 import { DeleteTodoButton } from '../DeleteTodoButton';
-import { TodoListWrapper } from '../TodoListWrapper';
 import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
+import { TodoListWrapper } from '../TodoListWrapper';
 
 export const ExpiredTodos: FC = () => {
   const { selectedTodos } = useTodoSelector((todo) => todo.status === TodoStatus.Expired);

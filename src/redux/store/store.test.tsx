@@ -1,6 +1,6 @@
 import React from 'react';
 import { App } from '../../App';
-import { createRandomTodo, render } from '../../test-utils';
+import { createRandomTodo, render, screen } from '../../test-utils';
 import { getPersistedState, initStore, persistState } from './index';
 import { addTodo } from '../features/todos/todosSlice';
 import { initialRootState } from '../index';
@@ -26,8 +26,8 @@ describe('redux store', () => {
 
   it('can be created with custom initial state', () => {
     const { todo, initialState } = createRandomInitialState();
-    const { getByText } = render(<App />, { initialState });
-    expect(getByText(todo.text)).toBeVisible();
+    render(<App />, { initialState });
+    expect(screen.getByText(todo.text)).toBeVisible();
   });
 
   it('stores updates into localStorage', () => {

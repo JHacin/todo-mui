@@ -65,7 +65,14 @@ export const AddTodoForm: FC = () => {
           />
         </Grid>
         <Grid item xs={12} sm="auto">
-          <Button type="submit" variant="contained" color="primary" disabled={!isValid} fullWidth>
+          <Button
+            type="submit"
+            name="todo-add-submit"
+            variant="contained"
+            color="primary"
+            disabled={!isValid}
+            fullWidth
+          >
             Add
           </Button>
         </Grid>

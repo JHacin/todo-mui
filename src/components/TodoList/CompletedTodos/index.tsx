@@ -10,10 +10,10 @@ import {
 import { Todo, TodoStatus } from '../../../types';
 import { useTodoSelector } from '../../../hooks/useTodoSelector';
 import { DeleteTodoButton } from '../DeleteTodoButton';
-import { TodoListWrapper } from '../TodoListWrapper';
 import { makeStyles } from '@material-ui/core/styles';
 import { useAppDispatch } from '../../../redux/store';
 import { updateTodo, updateTodosOrder } from '../../../redux/features/todos/todosSlice';
+import { TodoListWrapper } from '../TodoListWrapper';
 
 const useStyles = makeStyles({
   primaryText: {

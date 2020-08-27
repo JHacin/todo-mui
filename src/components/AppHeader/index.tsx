@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { AppBar, Box, Grid, Hidden, Toolbar, Typography } from '@material-ui/core';
-import { SearchInput } from './SearchInput';
+import { TodoSearchInput } from './TodoSearchInput';
 
 export const AppHeader: FC = () => {
   return (
@@ -15,7 +15,7 @@ export const AppHeader: FC = () => {
             </Grid>
           </Hidden>
           <Grid item xs={12} sm="auto">
-            <SearchInput />
+            <TodoSearchInput />
           </Grid>
         </Grid>
       </Toolbar>

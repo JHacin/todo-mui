@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
-import { Todo } from '../../../types';
+import { Todo } from '../../../../types';
 import { Button, Grid, InputAdornment, TextField } from '@material-ui/core';
 import { DateTimePicker } from '@material-ui/pickers';
 import EventIcon from '@material-ui/icons/Event';
-import { TodoFormValues, useTodoFormContext } from '../../../hooks/useTodoFormContext';
+import { TodoFormValues, useTodoFormContext } from '../../../../hooks/useTodoFormContext';
 import dayjs from 'dayjs';
 
 interface ActiveTodosItemEditFormProps {

@@ -9,7 +9,8 @@ import { initStore } from '../redux/store';
 import DayjsUtils from '@date-io/dayjs';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { initialRootState, RootState } from '../redux';
-
+import mediaQuery from 'css-mediaquery';
+import { SnackbarProvider } from 'notistack';
 export * from '@testing-library/react';
 
 interface RenderOptions extends RtlRenderOptions {
@@ -28,12 +29,27 @@ export const render = (
   const Wrapper: FC = ({ children }) => {
     return (
       <Provider store={store}>
-        <MuiPickersUtilsProvider utils={DayjsUtils}>{children}</MuiPickersUtilsProvider>
+        <MuiPickersUtilsProvider utils={DayjsUtils}>
+          <SnackbarProvider maxSnack={3}>{children}</SnackbarProvider>
+        </MuiPickersUtilsProvider>
       </Provider>
     );
   };
 
   return rtlRender(ui, { wrapper: Wrapper, ...renderOptions });
+};
+
+export const createMatchMedia = (width: number) => {
+  return (query: string): MediaQueryList => ({
+    matches: mediaQuery.match(query, { width }),
+    media: '',
+    onchange: () => {},
+    dispatchEvent: () => true,
+    addListener: () => {},
+    removeListener: () => {},
+    addEventListener: () => {},
+    removeEventListener: () => {},
+  });
 };
 
 export const createRandomTodo = (data?: Partial<Todo>): Todo => {

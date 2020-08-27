@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Todo, TodoStatus } from '../../../types';
+import { Todo, TodoStatus } from '../../../../types';
 import {
   Checkbox,
   Hidden,
@@ -9,12 +9,12 @@ import {
   ListItemSecondaryAction,
   ListItemText,
 } from '@material-ui/core';
-import { DeleteTodoButton } from '../DeleteTodoButton';
-import { updateTodo } from '../../../redux/features/todos/todosSlice';
-import { useAppDispatch } from '../../../redux/store';
-import { RemainingTimeLabel } from './RemainingTimeLabel';
+import { DeleteTodoButton } from '../../DeleteTodoButton';
+import { updateTodo } from '../../../../redux/features/todos/todosSlice';
+import { useAppDispatch } from '../../../../redux/store';
+import { RemainingTimeLabel } from '../ RemainingTimeLabel';
 import EditIcon from '@material-ui/icons/Edit';
-import { EditTodoForm } from './EditTodoForm';
+import { EditTodoForm } from '../EditTodoForm';
 import { useSnackbar } from 'notistack';
 
 const congratulatoryMessages: string[] = [
@@ -67,7 +67,7 @@ export const ActiveTodosItem: FC<{ todo: Todo }> = ({ todo }) => {
       )}
       <ListItemSecondaryAction>
         <Hidden xsDown>
-          <IconButton onClick={onEditButtonClickHandler}>
+          <IconButton onClick={onEditButtonClickHandler} data-testid="active-todo-edit-toggle">
             <EditIcon color="action" fontSize="small" />
           </IconButton>
         </Hidden>
