@@ -38,7 +38,7 @@ export const ActiveTodosItem: FC<{ todo: Todo }> = ({ todo }) => {
         <Checkbox edge="start" onClick={onMarkAsCompletedHandler} />
       </ListItemIcon>
       {isInEditMode ? (
-        <ActiveTodosItemEditForm todo={todo} onSubmit={onEditSubmitHandler} />
+        <ActiveTodosItemEditForm todo={todo} onEditSubmit={onEditSubmitHandler} />
       ) : (
         <ListItemText
           primary={todo.text}

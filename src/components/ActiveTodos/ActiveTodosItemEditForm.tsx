@@ -1,71 +1,55 @@
-import React, { ChangeEventHandler, FC, FormEventHandler, useState } from 'react';
+import React, { FC } from 'react';
 import { Todo } from '../../types';
 import { Box, Button, InputAdornment, TextField } from '@material-ui/core';
 import { DateTimePicker } from '@material-ui/pickers';
-import dayjs from 'dayjs';
 import EventIcon from '@material-ui/icons/Event';
-import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
-import { isDueDateExpired } from '../../util';
+import { TodoFormValues, useTodoFormContext } from '../../hooks/useTodoFormContext';
+import dayjs from 'dayjs';
 
-export const ActiveTodosItemEditForm: FC<{ todo: Todo; onSubmit: (todo: Todo) => void }> = ({
-  todo,
-  onSubmit,
-}) => {
-  const [text, setText] = useState<string>(todo.text);
-  const [dueDate, setDueDate] = useState<MaterialUiPickersDate>(dayjs(todo.dueDate));
-  const [dueDateError, setDueDateError] = useState<boolean>(false);
+interface ActiveTodosItemEditFormProps {
+  todo: Todo;
+  onEditSubmit: (todo: Todo) => void;
+}
 
-  const isDueDateInvalid = (date: MaterialUiPickersDate): boolean => {
-    return !date || isDueDateExpired(date);
+export const ActiveTodosItemEditForm: FC<ActiveTodosItemEditFormProps> = ({ todo, onEditSubmit }) => {
+  const onSubmitHandler = ({ text, dueDate }: TodoFormValues): void => {
+    onEditSubmit({
+      ...todo,
+      text,
+      dueDate: dueDate!.format(),
+    });
   };
 
-  const onTextChangeHandler: ChangeEventHandler<HTMLInputElement> = (event): void => {
-    const value = event.target.value;
-    setText(value);
-  };
-
-  const onDueDateChangeHandler = (date: MaterialUiPickersDate): void => {
-    setDueDateError(isDueDateInvalid(date));
-    setDueDate(date);
-  };
-
-  const onSubmitHandler: FormEventHandler<HTMLFormElement> = (event): void => {
-    event.preventDefault();
-
-    if (!text || !dueDate) {
-      return;
-    }
-
-    if (isDueDateInvalid(dueDate)) {
-      setDueDateError(true);
-      return;
-    }
-
-    onSubmit({ ...todo, text, dueDate: dueDate.format() });
-  };
+  const { values, errors, onSubmit, touched, updateField, isValid } = useTodoFormContext({
+    initialValues: {
+      text: todo.text,
+      dueDate: dayjs(todo.dueDate),
+    },
+    onSubmit: onSubmitHandler,
+  });
 
   return (
-    <form onSubmit={onSubmitHandler}>
+    <form onSubmit={onSubmit}>
       <Box display="flex" alignItems="flex-start">
         <Box mr={2}>
           <TextField
             autoFocus
             placeholder="Add a description..."
-            helperText={!text ? 'This field is required.' : ''}
-            error={!text}
-            value={text}
-            onChange={onTextChangeHandler}
+            helperText={touched.text && errors.text ? 'This field is required.' : ''}
+            error={touched.text && errors.text}
+            value={values.text}
+            onChange={(event) => updateField('text', event.target.value)}
           />
         </Box>
         <Box mr={2}>
           <DateTimePicker
-            onChange={onDueDateChangeHandler}
-            value={dueDate}
+            onChange={(date) => updateField('dueDate', date)}
+            value={values.dueDate}
             disablePast
             ampm={false}
             placeholder="Select a due date..."
-            helperText={dueDateError ? 'Please select a future date and time.' : ''}
-            error={dueDateError}
+            helperText={touched.dueDate && errors.dueDate ? 'Please select a future date and time.' : ''}
+            error={touched.dueDate && errors.dueDate}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -75,12 +59,7 @@ export const ActiveTodosItemEditForm: FC<{ todo: Todo; onSubmit: (todo: Todo) =>
             }}
           />
         </Box>
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          disabled={!text || !dueDate || dueDateError}
-        >
+        <Button type="submit" variant="contained" color="primary" disabled={!isValid}>
           Update
         </Button>
       </Box>

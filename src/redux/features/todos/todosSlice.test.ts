@@ -183,7 +183,7 @@ describe('todos reducer', () => {
       byId: {},
     };
     todos.forEach((todo) => {
-      initialState.byId[todo.id] = todo
+      initialState.byId[todo.id] = todo;
     });
 
     const updatedTodos = todos.map((todo) => ({ ...todo, text: 'I was changed.' }));
@@ -192,7 +192,7 @@ describe('todos reducer', () => {
       byId: {},
     };
     updatedTodos.forEach((todo) => {
-      updatedState.byId[todo.id] = todo
+      updatedState.byId[todo.id] = todo;
     });
 
     expect(todosReducer(initialState, { type: updateAllTodos.type, payload: updatedTodos })).toEqual<

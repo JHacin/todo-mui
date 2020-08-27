@@ -1,80 +1,58 @@
-import React, { ChangeEventHandler, FC, FormEventHandler, useRef, useState } from 'react';
+import React, { FC, useRef } from 'react';
 import { Box, Button, InputAdornment, TextField } from '@material-ui/core';
 import { DateTimePicker } from '@material-ui/pickers';
 import { addTodo } from '../redux/features/todos/todosSlice';
-import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { useAppDispatch } from '../redux/store';
 import EventIcon from '@material-ui/icons/Event';
 import dayjs from 'dayjs';
-import { isDueDateExpired } from '../util';
+import { TodoFormValues, useTodoFormContext } from '../hooks/useTodoFormContext';
 
 export const AddTodoInput: FC = () => {
   const dispatch = useAppDispatch();
   const textInputRef = useRef<HTMLInputElement>(null);
 
-  const [text, setText] = useState<string>('');
-  const [dueDate, setDueDate] = useState<MaterialUiPickersDate>(null);
-  const [dueDateError, setDueDateError] = useState<boolean>(false);
-
-  const isDueDateInvalid = (date: MaterialUiPickersDate): boolean => {
-    return !date || isDueDateExpired(date);
-  };
-
-  const onTextChangeHandler: ChangeEventHandler<HTMLInputElement> = (event): void => {
-    const value = event.target.value;
-    setText(value);
-  };
-
-  const onDueDateChangeHandler = (date: MaterialUiPickersDate): void => {
-    setDueDateError(isDueDateInvalid(date));
-    setDueDate(date);
-  };
-
-  const onSubmitHandler: FormEventHandler<HTMLFormElement> = (event): void => {
-    event.preventDefault();
-
-    if (!text || !dueDate) {
-      return;
-    }
-
-    if (isDueDateInvalid(dueDate)) {
-      setDueDateError(true);
-      return;
-    }
-
+  const onSubmitHandler = ({ text, dueDate }: TodoFormValues): void => {
     dispatch(
       addTodo({
         text,
-        dueDate: dueDate.format(),
+        dueDate: dueDate!.format(),
       })
     );
 
-    setText('');
+    updateField('text', '');
     textInputRef.current?.focus();
   };
 
+  const { values, errors, onSubmit, touched, updateField, isValid } = useTodoFormContext({
+    initialValues: {
+      text: '',
+      dueDate: null,
+    },
+    onSubmit: onSubmitHandler,
+  });
+
   return (
-    <form onSubmit={onSubmitHandler}>
+    <form onSubmit={onSubmit}>
       <Box display="flex" alignItems="flex-start">
         <Box mr={2}>
           <TextField
             autoFocus
             placeholder="Add a task..."
-            value={text}
-            onChange={onTextChangeHandler}
+            value={values.text}
+            onChange={(event) => updateField('text', event.target.value)}
             inputRef={textInputRef}
           />
         </Box>
         <Box mr={2}>
           <DateTimePicker
-            onChange={onDueDateChangeHandler}
-            value={dueDate}
+            onChange={(date) => updateField('dueDate', date)}
+            value={values.dueDate}
             disablePast
             ampm={false}
             initialFocusedDate={dayjs().add(1, 'hour')}
             placeholder="Select a due date..."
-            helperText={dueDateError ? 'Please select a future date and time.' : ''}
-            error={dueDateError}
+            helperText={touched.dueDate && errors.dueDate ? 'Please select a future date and time.' : ''}
+            error={touched.dueDate && errors.dueDate}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -84,12 +62,7 @@ export const AddTodoInput: FC = () => {
             }}
           />
         </Box>
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          disabled={!text || !dueDate || dueDateError}
-        >
+        <Button type="submit" variant="contained" color="primary" disabled={!isValid}>
           Add
         </Button>
       </Box>
