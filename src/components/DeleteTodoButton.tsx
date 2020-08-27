@@ -14,7 +14,7 @@ export const DeleteTodoButton: FC<{ todo: Todo }> = ({ todo }) => {
 
   return (
     <IconButton edge="end" onClick={onDeleteHandler}>
-      <DeleteIcon />
+      <DeleteIcon color="action" />
     </IconButton>
   );
 };

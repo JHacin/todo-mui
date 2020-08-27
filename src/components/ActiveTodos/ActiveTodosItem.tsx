@@ -1,32 +1,32 @@
 import React, { FC, useState } from 'react';
 import { Todo, TodoStatus } from '../../types';
-import { Checkbox, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText } from '@material-ui/core';
+import {
+  Checkbox,
+  IconButton,
+  ListItem,
+  ListItemIcon,
+  ListItemSecondaryAction,
+  ListItemText,
+} from '@material-ui/core';
 import { DeleteTodoButton } from '../DeleteTodoButton';
 import { updateTodo } from '../../redux/features/todos/todosSlice';
 import { useAppDispatch } from '../../redux/store';
-import dayjs from 'dayjs';
-import { useInterval } from '../../hooks/useInterval';
 import { RemainingTimeLabel } from '../RemainingTimeLabel';
-
-const getRemainingTime = ({ dueDate }: Todo): number => {
-  return dayjs(dueDate).diff(dayjs());
-};
+import EditIcon from '@material-ui/icons/Edit';
+import { ActiveTodosItemEditForm } from './ActiveTodosItemEditForm';
 
 export const ActiveTodosItem: FC<{ todo: Todo }> = ({ todo }) => {
-  const refreshRemainingTime = (): void => {
-    const remainingTime = getRemainingTime(todo);
-    const isExpired = remainingTime <= 0;
+  const dispatch = useAppDispatch();
+  const [isInEditMode, setIsInEditMode] = useState<boolean>(false);
 
-    if (isExpired) {
-      dispatch(updateTodo({ ...todo, status: TodoStatus.Expired }));
-    } else {
-      setRemainingTime(remainingTime);
-    }
+  const onEditButtonClickHandler = (): void => {
+    setIsInEditMode(!isInEditMode);
   };
 
-  const dispatch = useAppDispatch();
-  const [remainingTime, setRemainingTime] = useState<number>(getRemainingTime(todo));
-  useInterval(refreshRemainingTime, 1000 * 60);
+  const onEditSubmitHandler = (todo: Todo): void => {
+    dispatch(updateTodo(todo));
+    setIsInEditMode(false);
+  };
 
   const onMarkAsCompletedHandler = (): void => {
     dispatch(updateTodo({ ...todo, status: TodoStatus.Completed }));
@@ -37,12 +37,19 @@ export const ActiveTodosItem: FC<{ todo: Todo }> = ({ todo }) => {
       <ListItemIcon>
         <Checkbox edge="start" onClick={onMarkAsCompletedHandler} />
       </ListItemIcon>
-      <ListItemText
-        primary={todo.text}
-        secondary={<RemainingTimeLabel remainingTime={remainingTime} />}
-        secondaryTypographyProps={{ component: 'div' }}
-      />
+      {isInEditMode ? (
+        <ActiveTodosItemEditForm todo={todo} onSubmit={onEditSubmitHandler} />
+      ) : (
+        <ListItemText
+          primary={todo.text}
+          secondary={<RemainingTimeLabel dueDate={todo.dueDate} />}
+          secondaryTypographyProps={{ component: 'div' }}
+        />
+      )}
       <ListItemSecondaryAction>
+        <IconButton onClick={onEditButtonClickHandler}>
+          <EditIcon color="action" />
+        </IconButton>
         <DeleteTodoButton todo={todo} />
       </ListItemSecondaryAction>
     </ListItem>

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuid } from 'uuid';
 import { Todo, TodoStatus } from '../../../types';
-import { initialRootState, RootState } from '../../index';
+import { initialRootState } from '../../index';
 import { isDueDateExpired } from '../../../util';
 
 const todosSlice = createSlice({
@@ -32,12 +32,15 @@ const todosSlice = createSlice({
     updateTodo(state, action: PayloadAction<Todo>) {
       state.byId[action.payload.id] = action.payload;
     },
-    updateTodosOrder(state, action: PayloadAction<RootState['todos']['order']>) {
-      state.order = action.payload;
+    updateTodosOrder(state, action: PayloadAction<Todo['id'][]>) {
+      state.order = [...new Set([...action.payload, ...state.order])]; // We remove any duplicates.
+    },
+    updateAllTodos(state, action: PayloadAction<Todo[]>) {
+      action.payload.forEach((todo) => (state.byId[todo.id] = todo));
     },
   },
 });
 
-export const { addTodo, removeTodo, updateTodo, updateTodosOrder } = todosSlice.actions;
+export const { addTodo, removeTodo, updateTodo, updateTodosOrder, updateAllTodos } = todosSlice.actions;
 
 export default todosSlice.reducer;

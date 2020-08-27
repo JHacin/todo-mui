@@ -15,7 +15,7 @@ export const ExpiredTodos: FC = () => {
 
   return (
     <TodoListWrapper title="Overdue">
-      <List dense>
+      <List>
         {selectedTodos.map((todo) => (
           <ListItem key={todo.id} disabled>
             <ListItemIcon>

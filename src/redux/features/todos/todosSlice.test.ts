@@ -1,4 +1,10 @@
-import todosReducer, { addTodo, removeTodo, updateTodo } from './todosSlice';
+import todosReducer, {
+  addTodo,
+  removeTodo,
+  updateTodo,
+  updateTodosOrder,
+  updateAllTodos,
+} from './todosSlice';
 import { TodoStatus } from '../../../types';
 import { AnyAction } from '@reduxjs/toolkit';
 import { createRandomTodo } from '../../../test-utils';
@@ -146,6 +152,54 @@ describe('todos reducer', () => {
         },
         [otherTodo.id]: otherTodo,
       },
+    });
+  });
+
+  it('should handle updateTodosOrder', () => {
+    const initialState: RootState['todos'] = {
+      order: ['1', '2', '3'],
+      byId: {
+        '1': createRandomTodo(),
+        '2': createRandomTodo(),
+        '3': createRandomTodo(),
+      },
+    };
+
+    expect(
+      todosReducer(initialState, {
+        type: updateTodosOrder.type,
+        payload: ['2', '3', '1', '1', '1', '2', '3'], // checking if only unique values are kept
+      })
+    ).toEqual<RootState['todos']>({
+      order: ['2', '3', '1'],
+      byId: initialState.byId,
+    });
+  });
+
+  it('should handle updateAllTodos', () => {
+    const todos = [...Array(4)].map((_) => createRandomTodo());
+    const initialState: RootState['todos'] = {
+      order: todos.map((todo) => todo.id),
+      byId: {},
+    };
+    todos.forEach((todo) => {
+      initialState.byId[todo.id] = todo
+    });
+
+    const updatedTodos = todos.map((todo) => ({ ...todo, text: 'I was changed.' }));
+    const updatedState: RootState['todos'] = {
+      ...initialState,
+      byId: {},
+    };
+    updatedTodos.forEach((todo) => {
+      updatedState.byId[todo.id] = todo
+    });
+
+    expect(todosReducer(initialState, { type: updateAllTodos.type, payload: updatedTodos })).toEqual<
+      RootState['todos']
+    >({
+      ...initialState,
+      byId: updatedState.byId,
     });
   });
 });
