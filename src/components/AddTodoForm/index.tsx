@@ -1,11 +1,11 @@
 import React, { FC, useRef } from 'react';
 import { Button, Grid, InputAdornment, TextField } from '@material-ui/core';
 import { DateTimePicker } from '@material-ui/pickers';
-import { addTodo } from '../redux/features/todos/todosSlice';
-import { useAppDispatch } from '../redux/store';
+import { addTodo } from '../../redux/features/todos/todosSlice';
+import { useAppDispatch } from '../../redux/store';
 import EventIcon from '@material-ui/icons/Event';
 import dayjs from 'dayjs';
-import { TodoFormValues, useTodoFormContext } from '../hooks/useTodoFormContext';
+import { TodoFormValues, useTodoFormContext } from '../../hooks/useTodoFormContext';
 
 export const AddTodoForm: FC = () => {
   const dispatch = useAppDispatch();

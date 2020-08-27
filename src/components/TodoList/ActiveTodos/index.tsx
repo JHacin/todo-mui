@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
 import { List } from '@material-ui/core';
-import { TodoStatus } from '../../types';
-import { useTodoSelector } from '../../hooks/useTodoSelector';
+import { TodoStatus } from '../../../types';
+import { useTodoSelector } from '../../../hooks/useTodoSelector';
 import { ActiveTodosItem } from './ActiveTodosItem';
 import { TodoListWrapper } from '../TodoListWrapper';
 import { DragDropContext, DragDropContextProps, Draggable, Droppable } from 'react-beautiful-dnd';
-import { useAppDispatch } from '../../redux/store';
-import { updateTodosOrder } from '../../redux/features/todos/todosSlice';
+import { useAppDispatch } from '../../../redux/store';
+import { updateTodosOrder } from '../../../redux/features/todos/todosSlice';
 
 export const ActiveTodos: FC = () => {
   const dispatch = useAppDispatch();

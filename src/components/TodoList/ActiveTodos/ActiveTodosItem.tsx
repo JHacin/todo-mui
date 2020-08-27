@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Todo, TodoStatus } from '../../types';
+import { Todo, TodoStatus } from '../../../types';
 import {
   Checkbox,
   Hidden,
@@ -10,11 +10,11 @@ import {
   ListItemText,
 } from '@material-ui/core';
 import { DeleteTodoButton } from '../DeleteTodoButton';
-import { updateTodo } from '../../redux/features/todos/todosSlice';
-import { useAppDispatch } from '../../redux/store';
-import { RemainingTimeLabel } from '../RemainingTimeLabel';
+import { updateTodo } from '../../../redux/features/todos/todosSlice';
+import { useAppDispatch } from '../../../redux/store';
+import { RemainingTimeLabel } from './RemainingTimeLabel';
 import EditIcon from '@material-ui/icons/Edit';
-import { EditTodoForm } from '../EditTodoForm/EditTodoForm';
+import { EditTodoForm } from './EditTodoForm';
 import { useSnackbar } from 'notistack';
 
 const congratulatoryMessages: string[] = [

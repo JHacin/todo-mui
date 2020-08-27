@@ -7,13 +7,13 @@ import {
   ListItemSecondaryAction,
   ListItemText,
 } from '@material-ui/core';
-import { Todo, TodoStatus } from '../types';
-import { useTodoSelector } from '../hooks/useTodoSelector';
-import { DeleteTodoButton } from './DeleteTodoButton';
-import { TodoListWrapper } from './TodoListWrapper';
+import { Todo, TodoStatus } from '../../../types';
+import { useTodoSelector } from '../../../hooks/useTodoSelector';
+import { DeleteTodoButton } from '../DeleteTodoButton';
+import { TodoListWrapper } from '../TodoListWrapper';
 import { makeStyles } from '@material-ui/core/styles';
-import { useAppDispatch } from '../redux/store';
-import { updateTodo, updateTodosOrder } from '../redux/features/todos/todosSlice';
+import { useAppDispatch } from '../../../redux/store';
+import { updateTodo, updateTodosOrder } from '../../../redux/features/todos/todosSlice';
 
 const useStyles = makeStyles({
   primaryText: {

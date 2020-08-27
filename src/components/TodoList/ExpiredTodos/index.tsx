@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import { List, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText } from '@material-ui/core';
-import { useTodoSelector } from '../hooks/useTodoSelector';
-import { TodoStatus } from '../types';
-import { DeleteTodoButton } from './DeleteTodoButton';
-import { TodoListWrapper } from './TodoListWrapper';
+import { useTodoSelector } from '../../../hooks/useTodoSelector';
+import { TodoStatus } from '../../../types';
+import { DeleteTodoButton } from '../DeleteTodoButton';
+import { TodoListWrapper } from '../TodoListWrapper';
 import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
 
 export const ExpiredTodos: FC = () => {

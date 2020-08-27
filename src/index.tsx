@@ -7,7 +7,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DayjsUtils from '@date-io/dayjs';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
-import { CronWrapper } from './components/CronWrapper/CronWrapper';
+import { CronWrapper } from './components/CronWrapper';
 import { SnackbarProvider } from 'notistack';
 
 ReactDOM.render(
