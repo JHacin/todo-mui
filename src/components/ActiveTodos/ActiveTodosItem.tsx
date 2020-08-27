@@ -14,9 +14,26 @@ import { useAppDispatch } from '../../redux/store';
 import { RemainingTimeLabel } from '../RemainingTimeLabel';
 import EditIcon from '@material-ui/icons/Edit';
 import { ActiveTodosItemEditForm } from './ActiveTodosItemEditForm';
+import { useSnackbar } from 'notistack';
+
+const congratulatoryMessages: string[] = [
+  'Way to go!',
+  'Yay!',
+  'Awesome!',
+  'Well done!',
+  'You did it!',
+  'Bravo!',
+  'Hooray!',
+  '🥳',
+];
+
+const getRandomCompliment = (): string => {
+  return congratulatoryMessages[Math.round(Math.random() * congratulatoryMessages.length)];
+};
 
 export const ActiveTodosItem: FC<{ todo: Todo }> = ({ todo }) => {
   const dispatch = useAppDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const [isInEditMode, setIsInEditMode] = useState<boolean>(false);
 
   const onEditButtonClickHandler = (): void => {
@@ -30,6 +47,7 @@ export const ActiveTodosItem: FC<{ todo: Todo }> = ({ todo }) => {
 
   const onMarkAsCompletedHandler = (): void => {
     dispatch(updateTodo({ ...todo, status: TodoStatus.Completed }));
+    enqueueSnackbar(getRandomCompliment(), { variant: 'success' });
   };
 
   return (

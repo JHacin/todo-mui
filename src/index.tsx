@@ -8,14 +8,17 @@ import DayjsUtils from '@date-io/dayjs';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { CronWrapper } from './components/CronWrapper/CronWrapper';
+import { SnackbarProvider } from 'notistack';
 
 ReactDOM.render(
   <Provider store={store}>
-    <CronWrapper>
-      <MuiPickersUtilsProvider utils={DayjsUtils}>
-        <App />
-      </MuiPickersUtilsProvider>
-    </CronWrapper>
+    <MuiPickersUtilsProvider utils={DayjsUtils}>
+      <SnackbarProvider maxSnack={3}>
+        <CronWrapper>
+          <App />
+        </CronWrapper>
+      </SnackbarProvider>
+    </MuiPickersUtilsProvider>
   </Provider>,
   document.getElementById('root')
 );
