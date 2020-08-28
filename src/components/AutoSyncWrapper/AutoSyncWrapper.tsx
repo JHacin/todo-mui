@@ -1,5 +1,5 @@
 import { render } from '../../test-utils';
-import { CronWrapper } from './index';
+import { AutoSyncWrapper } from './index';
 import React from 'react';
 import { initStore } from '../../redux/store';
 import { initialRootState } from '../../redux';
@@ -9,7 +9,7 @@ import { createRandomTodo, generateMockTodoState } from '../../test-utils/mock-g
 
 jest.useFakeTimers();
 
-describe('CronWrapper', () => {
+describe('AutoSyncWrapper', () => {
   it('updates expired todos', () => {
     const todo = createRandomTodo({
       dueDate: dayjs().subtract(1, 'week').format(),
@@ -23,7 +23,7 @@ describe('CronWrapper', () => {
       },
     });
 
-    render(<CronWrapper />, { store });
+    render(<AutoSyncWrapper />, { store });
     expect(store.getState().todos.byId[todo.id].status).toEqual(todo.status);
 
     jest.advanceTimersByTime(1000 * 30);

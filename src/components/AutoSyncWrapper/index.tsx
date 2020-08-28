@@ -7,7 +7,7 @@ import { updateAllTodos } from '../../redux/features/todos/todosSlice';
 import { useInterval } from '../../hooks/useInterval';
 import { useSnackbar } from 'notistack';
 
-export const CronWrapper: FC = ({ children }) => {
+export const AutoSyncWrapper: FC = ({ children }) => {
   const dispatch = useAppDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const { selectedTodos: activeTodos } = useTodoSelector((todo) => todo.status === TodoStatus.Active);
