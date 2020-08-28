@@ -7,7 +7,7 @@ import EventIcon from '@material-ui/icons/Event';
 import dayjs from 'dayjs';
 import { TodoFormValues, useTodoFormContext } from '../../hooks/useTodoFormContext';
 
-export const AddTodoForm: FC = () => {
+export const AddTodoForm: FC<{ initialValues?: TodoFormValues }> = ({ initialValues }) => {
   const dispatch = useAppDispatch();
   const textInputRef = useRef<HTMLInputElement>(null);
 
@@ -24,7 +24,7 @@ export const AddTodoForm: FC = () => {
   };
 
   const { values, errors, onSubmit, touched, updateField, isValid } = useTodoFormContext({
-    initialValues: {
+    initialValues: initialValues || {
       text: '',
       dueDate: null,
     },
