@@ -1,10 +1,11 @@
-import { createRandomTodo, render } from '../../test-utils';
+import { render } from '../../test-utils';
 import { CronWrapper } from './index';
 import React from 'react';
 import { initStore } from '../../redux/store';
 import { initialRootState } from '../../redux';
 import dayjs from 'dayjs';
 import { TodoStatus } from '../../types';
+import { createRandomTodo, generateMockTodoState } from '../../test-utils/mock-generators';
 
 jest.useFakeTimers();
 
@@ -18,12 +19,7 @@ describe('CronWrapper', () => {
     const store = initStore({
       fallbackState: {
         ...initialRootState,
-        todos: {
-          order: [todo.id],
-          byId: {
-            [todo.id]: todo,
-          },
-        },
+        todos: generateMockTodoState([todo]),
       },
     });
 

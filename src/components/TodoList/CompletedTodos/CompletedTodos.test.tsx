@@ -1,10 +1,11 @@
 import React from 'react';
-import { createRandomTodo, render, screen } from '../../../test-utils';
+import { render, screen } from '../../../test-utils';
 import { initStore } from '../../../redux/store';
 import { initialRootState } from '../../../redux';
 import { TodoStatus } from '../../../types';
 import { CompletedTodos } from './';
 import userEvent from '@testing-library/user-event';
+import { createRandomTodo, generateMockTodoState } from '../../../test-utils/mock-generators';
 
 describe('CompletedTodos', () => {
   it('does not render anything if there are no expired todos', async () => {
@@ -21,14 +22,7 @@ describe('CompletedTodos', () => {
     const store = initStore({
       fallbackState: {
         ...initialRootState,
-        todos: {
-          order: [activeTodo.id, completedTodo1.id, completedTodo2.id],
-          byId: {
-            [activeTodo.id]: activeTodo,
-            [completedTodo1.id]: completedTodo1,
-            [completedTodo2.id]: completedTodo2,
-          },
-        },
+        todos: generateMockTodoState([activeTodo, completedTodo1, completedTodo2]),
       },
     });
 
@@ -46,12 +40,7 @@ describe('CompletedTodos', () => {
     const store = initStore({
       fallbackState: {
         ...initialRootState,
-        todos: {
-          order: [todo.id],
-          byId: {
-            [todo.id]: todo,
-          },
-        },
+        todos: generateMockTodoState([todo]),
       },
     });
 

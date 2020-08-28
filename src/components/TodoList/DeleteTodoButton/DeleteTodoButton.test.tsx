@@ -1,9 +1,10 @@
 import React from 'react';
-import { createRandomTodo, render, screen } from '../../../test-utils';
+import { render, screen } from '../../../test-utils';
 import { initStore } from '../../../redux/store';
 import { initialRootState } from '../../../redux';
 import { DeleteTodoButton } from './index';
 import userEvent from '@testing-library/user-event';
+import { createRandomTodo, generateMockTodoState } from '../../../test-utils/mock-generators';
 
 describe('DeleteTodoButton', () => {
   it('deletes a todo', () => {
@@ -12,12 +13,7 @@ describe('DeleteTodoButton', () => {
     const store = initStore({
       fallbackState: {
         ...initialRootState,
-        todos: {
-          order: [todo.id],
-          byId: {
-            [todo.id]: todo,
-          },
-        },
+        todos: generateMockTodoState([todo]),
       },
     });
 

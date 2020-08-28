@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 import { Box, Container, CssBaseline, Grid } from '@material-ui/core';
-import { AddTodoForm } from './components/AddTodoForm';
-import { ActiveTodos } from './components/TodoList/ActiveTodos';
-import { ExpiredTodos } from './components/TodoList/ExpiredTodos';
-import { CompletedTodos } from './components/TodoList/CompletedTodos';
-import { AppHeader } from './components/AppHeader';
+import { AddTodoForm } from './AddTodoForm';
+import { ActiveTodos } from './TodoList/ActiveTodos';
+import { ExpiredTodos } from './TodoList/ExpiredTodos';
+import { CompletedTodos } from './TodoList/CompletedTodos';
+import { AppHeader } from './AppHeader';
 
 export const App: FC = () => {
   return (

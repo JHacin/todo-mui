@@ -1,9 +1,10 @@
 import React from 'react';
-import { createRandomTodo, render, screen } from '../../../test-utils';
+import { render, screen } from '../../../test-utils';
 import { ExpiredTodos } from './index';
 import { initStore } from '../../../redux/store';
 import { initialRootState } from '../../../redux';
 import { TodoStatus } from '../../../types';
+import { createRandomTodo, generateMockTodoState } from '../../../test-utils/mock-generators';
 
 describe('ExpiredTodos', () => {
   it('does not render anything if there are no expired todos', async () => {
@@ -20,14 +21,7 @@ describe('ExpiredTodos', () => {
     const store = initStore({
       fallbackState: {
         ...initialRootState,
-        todos: {
-          order: [activeTodo.id, expiredTodo1.id, expiredTodo2.id],
-          byId: {
-            [activeTodo.id]: activeTodo,
-            [expiredTodo1.id]: expiredTodo1,
-            [expiredTodo2.id]: expiredTodo2,
-          },
-        },
+        todos: generateMockTodoState([activeTodo, expiredTodo1, expiredTodo2]),
       },
     });
 

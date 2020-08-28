@@ -7,8 +7,12 @@ import todosReducer, {
 } from './todosSlice';
 import { TodoStatus } from '../../../types';
 import { AnyAction } from '@reduxjs/toolkit';
-import { createRandomTodo } from '../../../test-utils';
 import { initialRootState, RootState } from '../../index';
+import {
+  createRandomTodo,
+  generateMockTodoState,
+  generateMultipleRandomTodos,
+} from '../../../test-utils/mock-generators';
 
 describe('todos reducer', () => {
   it('should handle initial state', () => {
@@ -23,101 +27,56 @@ describe('todos reducer', () => {
         type: addTodo.type,
         payload: newTodo,
       })
-    ).toEqual<RootState['todos']>({
-      order: [newTodo.id],
-      byId: {
-        [newTodo.id]: newTodo,
-      },
-    });
+    ).toEqual<RootState['todos']>(generateMockTodoState([newTodo]));
 
     const existingTodo = createRandomTodo();
 
     expect(
-      todosReducer(
-        {
-          order: [existingTodo.id],
-          byId: {
-            [existingTodo.id]: existingTodo,
-          },
-        },
-        {
-          type: addTodo.type,
-          payload: newTodo,
-        }
-      )
-    ).toEqual<RootState['todos']>({
-      order: [newTodo.id, existingTodo.id],
-      byId: {
-        [existingTodo.id]: existingTodo,
-        [newTodo.id]: newTodo,
-      },
-    });
+      todosReducer(generateMockTodoState([existingTodo]), {
+        type: addTodo.type,
+        payload: newTodo,
+      })
+    ).toEqual<RootState['todos']>(generateMockTodoState([newTodo, existingTodo]));
   });
 
   it('should handle removeTodo', () => {
     const removedTodo = createRandomTodo();
 
     expect(
-      todosReducer(
-        {
-          order: [removedTodo.id],
-          byId: { [removedTodo.id]: removedTodo },
-        },
-        {
-          type: removeTodo.type,
-          payload: removedTodo,
-        }
-      )
-    ).toEqual<RootState['todos']>({
-      order: [],
-      byId: {},
-    });
+      todosReducer(generateMockTodoState([removedTodo]), {
+        type: removeTodo.type,
+        payload: removedTodo,
+      })
+    ).toEqual<RootState['todos']>(initialRootState.todos);
 
     const leftoverTodo = createRandomTodo();
 
     expect(
-      todosReducer(
-        {
-          order: [removedTodo.id, leftoverTodo.id],
-          byId: {
-            [removedTodo.id]: removedTodo,
-            [leftoverTodo.id]: leftoverTodo,
-          },
-        },
-        {
-          type: removeTodo.type,
-          payload: removedTodo,
-        }
-      )
-    ).toEqual<RootState['todos']>({
-      order: [leftoverTodo.id],
-      byId: { [leftoverTodo.id]: leftoverTodo },
-    });
+      todosReducer(generateMockTodoState([removedTodo, leftoverTodo]), {
+        type: removeTodo.type,
+        payload: removedTodo,
+      })
+    ).toEqual<RootState['todos']>(generateMockTodoState([leftoverTodo]));
   });
 
   it('should handle updateTodo', () => {
     const updatedTodo = createRandomTodo();
+    const mockState = generateMockTodoState([updatedTodo]);
 
     expect(
-      todosReducer(
-        {
-          order: [updatedTodo.id],
-          byId: { [updatedTodo.id]: updatedTodo },
+      todosReducer(mockState, {
+        type: updateTodo.type,
+        payload: {
+          ...updatedTodo,
+          status: TodoStatus.Expired,
+          text: 'I was changed.',
         },
-        {
-          type: updateTodo.type,
-          payload: {
-            ...updatedTodo,
-            status: TodoStatus.Expired,
-            text: 'I was changed.',
-          },
-        }
-      )
+      })
     ).toEqual<RootState['todos']>({
-      order: [updatedTodo.id],
+      ...mockState,
       byId: {
         [updatedTodo.id]: {
-          ...updatedTodo,
+          ...mockState.byId[updatedTodo.id],
           status: TodoStatus.Expired,
           text: 'I was changed.',
         },
@@ -125,81 +84,55 @@ describe('todos reducer', () => {
     });
 
     const otherTodo = createRandomTodo();
+    const mockState2 = generateMockTodoState([updatedTodo, otherTodo]);
 
     expect(
-      todosReducer(
-        {
-          order: [updatedTodo.id, otherTodo.id],
-          byId: {
-            [updatedTodo.id]: updatedTodo,
-            [otherTodo.id]: otherTodo,
-          },
-        },
-        {
-          type: updateTodo.type,
-          payload: {
-            ...updatedTodo,
-            status: TodoStatus.Completed,
-          },
-        }
-      )
-    ).toEqual<RootState['todos']>({
-      order: [updatedTodo.id, otherTodo.id],
-      byId: {
-        [updatedTodo.id]: {
+      todosReducer(mockState2, {
+        type: updateTodo.type,
+        payload: {
           ...updatedTodo,
           status: TodoStatus.Completed,
         },
-        [otherTodo.id]: otherTodo,
+      })
+    ).toEqual<RootState['todos']>({
+      ...mockState2,
+      byId: {
+        ...mockState2.byId,
+        [updatedTodo.id]: {
+          ...mockState2.byId[updatedTodo.id],
+          status: TodoStatus.Completed,
+        },
       },
     });
   });
 
   it('should handle updateTodosOrder', () => {
-    const initialState: RootState['todos'] = {
-      order: ['1', '2', '3'],
-      byId: {
-        '1': createRandomTodo(),
-        '2': createRandomTodo(),
-        '3': createRandomTodo(),
-      },
-    };
+    const todos = generateMultipleRandomTodos(4);
+    const initialState = generateMockTodoState(todos);
 
     expect(
       todosReducer(initialState, {
         type: updateTodosOrder.type,
-        payload: ['2', '3', '1', '1', '1', '2', '3'], // checking if only unique values are kept
+        payload: [2, 3, 1, 1, 1, 3].map((index) => todos[index].id), // checking if only unique values are kept
       })
     ).toEqual<RootState['todos']>({
-      order: ['2', '3', '1'],
+      order: [2, 3, 1].map((index) => todos[index].id),
       byId: initialState.byId,
     });
   });
 
   it('should handle updateAllTodos', () => {
-    const todos = [...Array(4)].map((_) => createRandomTodo());
-    const initialState: RootState['todos'] = {
-      order: todos.map((todo) => todo.id),
-      byId: {},
-    };
-    todos.forEach((todo) => {
-      initialState.byId[todo.id] = todo;
-    });
+    const todos = generateMultipleRandomTodos(4);
+    const initialState = generateMockTodoState(todos);
 
     const updatedTodos = todos.map((todo) => ({ ...todo, text: 'I was changed.' }));
-    const updatedState: RootState['todos'] = {
-      ...initialState,
-      byId: {},
-    };
-    updatedTodos.forEach((todo) => {
-      updatedState.byId[todo.id] = todo;
-    });
+    const updatedInitialState = generateMockTodoState(updatedTodos);
 
     expect(todosReducer(initialState, { type: updateAllTodos.type, payload: updatedTodos })).toEqual<
       RootState['todos']
     >({
       ...initialState,
-      byId: updatedState.byId,
+      byId: updatedInitialState.byId,
     });
   });
 });

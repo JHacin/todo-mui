@@ -1,29 +1,22 @@
 import React from 'react';
-import { App } from '../../App';
-import { createRandomTodo, render, screen } from '../../test-utils';
+import { App } from '../../components/App';
+import { render, screen } from '../../test-utils';
 import { getPersistedState, initStore, persistState } from './index';
 import { addTodo } from '../features/todos/todosSlice';
+import { createRandomTodo, generateMockTodoState } from '../../test-utils/mock-generators';
 import { initialRootState } from '../index';
 
 export const createRandomInitialState = () => {
   const todo = createRandomTodo();
-
   const initialState = {
     ...initialRootState,
-    todos: {
-      order: [todo.id],
-      byId: { [todo.id]: todo },
-    },
+    todos: generateMockTodoState([todo]),
   };
 
   return { todo, initialState };
 };
 
 describe('redux store', () => {
-  it('is created with the default initial state', () => {
-    render(<App />);
-  });
-
   it('can be created with custom initial state', () => {
     const { todo, initialState } = createRandomInitialState();
     render(<App />, { initialState });

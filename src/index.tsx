@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'fontsource-roboto';
 import 'material-design-icons/iconfont/material-icons.css';
-import { App } from './App';
+import { App } from './components/App';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DayjsUtils from '@date-io/dayjs';
 import { Provider } from 'react-redux';

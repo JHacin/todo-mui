@@ -1,11 +1,15 @@
 import React from 'react';
-import { createRandomTodo, render, screen } from '../../../../test-utils';
+import { render, screen } from '../../../../test-utils';
 import { TodoStatus } from '../../../../types';
 import { initStore } from '../../../../redux/store';
 import { initialRootState, RootState } from '../../../../redux';
 import { ActiveTodosItem } from './index';
 import { EnhancedStore } from '@reduxjs/toolkit';
 import userEvent from '@testing-library/user-event';
+import { createRandomTodo, generateMockTodoState } from '../../../../test-utils/mock-generators';
+
+const getUpdateButton = () => screen.queryByRole('button', { name: /update/i });
+const getEditButton = () => screen.getByTestId('active-todo-edit-toggle');
 
 describe('ActiveTodosItem', () => {
   const todo = createRandomTodo();
@@ -15,12 +19,7 @@ describe('ActiveTodosItem', () => {
     store = initStore({
       fallbackState: {
         ...initialRootState,
-        todos: {
-          order: [todo.id],
-          byId: {
-            [todo.id]: todo,
-          },
-        },
+        todos: generateMockTodoState([todo]),
       },
     });
     render(<ActiveTodosItem todo={todo} />, { store });
@@ -33,10 +32,10 @@ describe('ActiveTodosItem', () => {
   });
 
   it('allows toggling between edit and view modes', () => {
-    expect(screen.queryByRole('button', { name: /update/i })).not.toBeInTheDocument();
-    userEvent.click(screen.getByTestId('active-todo-edit-toggle'));
-    expect(screen.getByRole('button', { name: /update/i })).toBeInTheDocument();
-    userEvent.click(screen.getByTestId('active-todo-edit-toggle'));
-    expect(screen.queryByRole('button', { name: /update/i })).not.toBeInTheDocument();
+    expect(getUpdateButton()).not.toBeInTheDocument();
+    userEvent.click(getEditButton());
+    expect(getUpdateButton()).toBeInTheDocument();
+    userEvent.click(getEditButton());
+    expect(getUpdateButton()).not.toBeInTheDocument();
   });
 });

@@ -10,9 +10,7 @@ jest.useFakeTimers();
 describe('useDebounce', () => {
   it('handles an initial value', () => {
     const value = 100;
-
     const { result } = renderHook(() => useDebounce<typeof value>(value, 50));
-
     expect(result.current).toEqual(value);
   });
 
@@ -27,13 +25,11 @@ describe('useDebounce', () => {
     };
 
     const { container, rerender } = render(<Component text={initialText} />);
-
     // Check initial value
     expect(container.textContent).toBe(initialText);
 
     // Using rerender does not unmount the component, allowing us to manually update its props.
     rerender(<Component text={updatedText} />);
-
     // Verify that the value has not immediately changed.
     expect(container.textContent).toBe(initialText);
 

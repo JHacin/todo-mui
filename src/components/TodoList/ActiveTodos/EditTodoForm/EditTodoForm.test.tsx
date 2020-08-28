@@ -1,8 +1,12 @@
 import React from 'react';
-import { createRandomTodo, render, screen } from '../../../../test-utils';
+import { render, screen } from '../../../../test-utils';
 import { EditTodoForm } from './index';
 import userEvent from '@testing-library/user-event';
 import dayjs from 'dayjs';
+import { createRandomTodo } from '../../../../test-utils/mock-generators';
+
+const getTextInput = () => screen.getByPlaceholderText(/add a description.../i);
+const getSubmitButton = () => screen.getByRole('button', { name: /update/i });
 
 describe('EditTodoForm', () => {
   it('calls the submit handler', () => {
@@ -18,8 +22,8 @@ describe('EditTodoForm', () => {
   it('is disabled if the text input is empty', () => {
     const todo = createRandomTodo();
     render(<EditTodoForm todo={todo} onEditSubmit={jest.fn()} />);
-    userEvent.clear(screen.getByPlaceholderText(/add a description.../i));
-    expect(screen.getByRole('button', { name: /update/i })).toBeDisabled();
+    userEvent.clear(getTextInput());
+    expect(getSubmitButton()).toBeDisabled();
   });
 
   // Note: these tests could be improved by triggering the DateTimePicker component's onChange event somehow.
@@ -27,13 +31,13 @@ describe('EditTodoForm', () => {
   it('is disabled if the date input is invalid', () => {
     const todo = createRandomTodo({ dueDate: dayjs().subtract(1, 'hour').format() });
     render(<EditTodoForm todo={todo} onEditSubmit={jest.fn()} />);
-    expect(screen.getByRole('button', { name: /update/i })).toBeDisabled();
+    expect(getSubmitButton()).toBeDisabled();
   });
 
   it('shows validation errors', () => {
     const todo = createRandomTodo();
     render(<EditTodoForm todo={todo} onEditSubmit={jest.fn()} />);
-    userEvent.clear(screen.getByPlaceholderText(/add a description.../i));
+    userEvent.clear(getTextInput());
     expect(screen.getByText(/this field is required./i)).toBeInTheDocument();
   });
 });
